@@ -16,29 +16,36 @@
             box-sizing: border-box;
         }
 
-        body {
-            background-color: #FBF9F5; /* Bianco panna chiaro */
+        /* Fissa lo sfondo panna fin da subito per evitare qualsiasi sfarfallio o barra */
+        html, body {
+            background-color: #FBF9F5;
             color: #2C2C2C;
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
             display: flex;
             flex-direction: column;
         }
 
-        /* --- 1. SCHERMATA NERA E LOGO LENTO --- */
+        /* --- 1. SCHERMATA NERA, BAGLIORE E LOGO FLUIDO --- */
         #splash-screen {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000;
+            width: 100vw;
+            height: 100vh;
+            /* Sfondo nero con un leggero bagliore soffuso al centro sotto il logo */
+            background: radial-gradient(circle at center, #1c1c1c 0%, #000000 70%);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            animation: splashFadeOut 2.2s cubic-bezier(0.4, 0, 0.2, 1) 6.5s forwards;
+            /* Scomparsa graduale dello splash screen */
+            animation: splashFadeOut 1.8s cubic-bezier(0.4, 0, 0.2, 1) 6.0s forwards;
         }
 
         #splash-screen img {
@@ -46,29 +53,37 @@
             max-height: 220px;
             object-fit: contain;
             opacity: 0;
-            animation: ultraSlowBlurZoom 6s cubic-bezier(0.25, 0.1, 0.25, 1) 1s forwards;
+            /* Animazione logo: blur morbido, zoom e inizio dissolvenza leggermente prima della fine dello zoom */
+            animation: logoFluidAnimation 6s cubic-bezier(0.25, 0.1, 0.25, 1) 0.8s forwards;
         }
 
-        @keyframes ultraSlowBlurZoom {
+        @keyframes logoFluidAnimation {
             0% {
                 opacity: 0;
-                filter: blur(30px);
-                transform: scale(0.97);
+                filter: blur(25px);
+                transform: scale(0.96);
             }
-            35% {
+            30% {
                 opacity: 1;
                 filter: blur(0px);
                 transform: scale(1.00);
             }
-            65% {
+            /* L'effetto zoom continua dolcemente fino al 75% */
+            75% {
                 opacity: 1;
                 filter: blur(0px);
-                transform: scale(1.02);
+                transform: scale(1.03);
+            }
+            /* La dissolvenza in uscita inizia prima che termini lo zoom, fondendosi perfettamente */
+            88% {
+                opacity: 0.4;
+                filter: blur(10px);
+                transform: scale(1.045);
             }
             100% {
                 opacity: 0;
-                filter: blur(25px);
-                transform: scale(1.03);
+                filter: blur(20px);
+                transform: scale(1.05);
             }
         }
 
@@ -96,7 +111,7 @@
             font-weight: normal;
             letter-spacing: 1px;
             opacity: 0;
-            animation: elegantTitleReveal 2.2s cubic-bezier(0.22, 1, 0.36, 1) 8s forwards;
+            animation: elegantTitleReveal 2.2s cubic-bezier(0.22, 1, 0.36, 1) 7.2s forwards;
         }
 
         @keyframes elegantTitleReveal {
@@ -119,7 +134,7 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            animation: fadeInContent 1.4s ease-out 9.6s forwards;
+            animation: fadeInContent 1.4s ease-out 8.8s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -133,7 +148,7 @@
             margin: 0 auto;
             padding: 10px 0 25px;
             opacity: 0;
-            animation: fadeInContent 1.5s ease-out 10s forwards;
+            animation: fadeInContent 1.5s ease-out 9.2s forwards;
         }
 
         .swiper {
@@ -175,7 +190,7 @@
             color: #A0998E;
             letter-spacing: 1px;
             opacity: 0;
-            animation: fadeInContent 1.4s ease-out 10.3s forwards;
+            animation: fadeInContent 1.4s ease-out 9.5s forwards;
         }
 
         @keyframes fadeInContent {
@@ -192,7 +207,7 @@
 </head>
 <body>
 
-    <!-- Schermata Iniziale -->
+    <!-- Schermata Iniziale con bagliore e logo fluido -->
     <div id="splash-screen">
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
@@ -203,7 +218,7 @@
         <p>12 Settembre 2026</p>
     </header>
 
-    <!-- Carosello Fotografico con tutte le 8 foto -->
+    <!-- Carosello Fotografico con le 8 foto -->
     <div class="gallery-container">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
