@@ -100,89 +100,49 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE --- */
+        /* --- 2. INTESTAZIONE POSIZIONATA PIÙ IN BASSO CON EFFETTO SCRITTURA A MANO --- */
         header {
             text-align: center;
-            padding: 14px 8px 2px;
+            padding: 34px 6px 4px; /* Spostato più in basso */
             flex-shrink: 0;
         }
 
         header h1 {
             font-family: 'Alex Brush', cursive;
-            font-size: clamp(2.4rem, 10.2vw, 4.1rem);
+            font-size: clamp(2.8rem, 11.5vw, 4.5rem); /* Più grande */
             white-space: nowrap;
             color: #3A3532;
             font-weight: normal;
+            line-height: 1.15;
+            padding: 0 8px;
+            /* Effetto scrittura a mano fluida da sinistra verso destra */
+            clip-path: inset(0 100% 0 0);
             opacity: 0;
-            animation: cinematicNameReveal 2.4s cubic-bezier(0.16, 1, 0.3, 1) 7.4s forwards;
+            animation: handwritingReveal 3.2s cubic-bezier(0.35, 0, 0.25, 1) 7.4s forwards;
         }
 
-        @keyframes cinematicNameReveal {
+        @keyframes handwritingReveal {
             0% {
-                opacity: 0;
-                letter-spacing: -3px;
-                transform: translateY(14px);
-            }
-            60% {
                 opacity: 1;
+                clip-path: inset(0 100% 0 0);
             }
             100% {
                 opacity: 1;
-                letter-spacing: 0.5px;
-                transform: translateY(0);
+                clip-path: inset(0 0% 0 0);
             }
         }
 
         header p {
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             text-transform: uppercase;
             letter-spacing: 3.5px;
             color: #8C857B;
-            margin-top: 2px;
+            margin-top: 6px;
             opacity: 0;
-            animation: slowFadeRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 8.6s forwards;
+            animation: slowFadeRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 9.4s forwards;
         }
 
-        /* Tasto griglia stile iOS */
-        .view-controls {
-            margin-top: 8px;
-            display: flex;
-            justify-content: center;
-            opacity: 0;
-            animation: slowFadeRise 2s ease-out 10.2s forwards;
-        }
-
-        .grid-btn {
-            background-color: rgba(255, 255, 255, 0.85);
-            border: 1px solid #E5DFD5;
-            color: #5C554C;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            padding: 6px 14px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            transition: all 0.25s ease;
-        }
-
-        .grid-btn:active {
-            transform: scale(0.96);
-            background-color: #F2EDE4;
-        }
-
-        .grid-btn svg {
-            width: 13px;
-            height: 13px;
-            stroke: #5C554C;
-        }
-
-        /* --- 3. CAROSELLO FOTOGRAFICO E CORNICE UNIFORME --- */
+        /* --- 3. CAROSELLO FOTOGRAFICO --- */
         .gallery-container {
             flex: 1;
             display: flex;
@@ -194,13 +154,13 @@
             padding: 4px 0;
             min-height: 0;
             opacity: 0;
-            animation: slowPhotoReveal 2.6s cubic-bezier(0.22, 1, 0.36, 1) 9.4s forwards;
+            animation: slowPhotoReveal 2.4s cubic-bezier(0.22, 1, 0.36, 1) 9.8s forwards;
         }
 
         @keyframes slowPhotoReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.97) translateY(10px);
+                transform: scale(0.97) translateY(8px);
             }
             100% {
                 opacity: 1;
@@ -208,12 +168,12 @@
             }
         }
 
-        .swiper {
+        .swiper.mySwiper {
             width: 100%;
             height: 100%;
-            max-height: 58dvh;
-            padding: 0 46px;
-            overflow: hidden;
+            max-height: 54dvh;
+            padding: 0 48px;
+            position: relative;
         }
 
         .swiper-slide {
@@ -222,6 +182,7 @@
             align-items: center;
         }
 
+        /* Cornice bianca uniforme (~3mm) con angoli leggermente arrotondati */
         .photo-card {
             background-color: #ffffff;
             padding: 10px;
@@ -242,64 +203,93 @@
 
         .photo-card img {
             max-width: 100%;
-            max-height: 53dvh;
+            max-height: 49dvh;
             object-fit: contain;
             border-radius: 4px;
             display: block;
         }
 
-        .swiper-button-next, .swiper-button-prev {
+        /* Frecce direzionali ben visibili e funzionanti */
+        .mySwiper .swiper-button-next,
+        .mySwiper .swiper-button-prev {
             color: #4A443D;
-            background-color: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(220, 213, 202, 0.7);
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(215, 208, 196, 0.8);
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
             border-radius: 50%;
             width: 34px;
             height: 34px;
             margin-top: -17px;
-            opacity: 0 !important;
-            animation: arrowsDelayedReveal 2s ease-out 11s forwards;
-            transition: background-color 0.2s ease, transform 0.2s ease;
+            z-index: 20;
+            transition: transform 0.2s ease, background-color 0.2s ease;
         }
 
-        .swiper-button-next:active, .swiper-button-prev:active {
-            transform: scale(0.92);
-            background-color: #ffffff;
+        .mySwiper .swiper-button-prev {
+            left: 8px;
         }
 
-        .swiper-button-prev {
-            left: 6px;
+        .mySwiper .swiper-button-next {
+            right: 8px;
         }
 
-        .swiper-button-next {
-            right: 6px;
-        }
-
-        .swiper-button-next::after, .swiper-button-prev::after {
+        .mySwiper .swiper-button-next::after,
+        .mySwiper .swiper-button-prev::after {
             font-size: 14px;
             font-weight: 600;
         }
 
-        @keyframes arrowsDelayedReveal {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
+        .mySwiper .swiper-button-disabled {
+            opacity: 0.3;
         }
 
-        /* --- 4. FOOTER --- */
+        /* --- 4. SEZIONE INFERIORE: TASTO "TUTTE LE FOTO" + FOOTER --- */
+        .bottom-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 12px 22px;
+            flex-shrink: 0;
+            opacity: 0;
+            animation: slowFadeRise 2s ease-out 10.6s forwards;
+        }
+
+        .grid-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #E2DBD0;
+            color: #5C554C;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+        }
+
+        .grid-btn:active {
+            transform: scale(0.96);
+            background-color: #F2EDE4;
+        }
+
+        .grid-btn svg {
+            width: 13px;
+            height: 13px;
+            stroke: #5C554C;
+        }
+
         footer {
             text-align: center;
-            padding: 4px 12px 24px;
             font-size: 0.88rem;
             font-weight: 500;
             color: #7A7268;
             letter-spacing: 2.5px;
-            flex-shrink: 0;
-            opacity: 0;
-            animation: slowFadeRise 2s ease-out 10.6s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -398,11 +388,11 @@
             transform: scale(0.95);
         }
 
-        /* --- 6. VISTA A SCHERMO INTERO (FULLSCREEN IMMERSIVO) --- */
+        /* --- 6. VISTA A SCHERMO INTERO SU SFONDO BIANCO PANNA --- */
         #fullscreen-overlay {
             position: fixed;
             inset: 0;
-            background-color: #0B0B0B;
+            background-color: #FBF9F5; /* Stesso sfondo bianco panna della pagina principale */
             z-index: 60000;
             display: flex;
             flex-direction: column;
@@ -425,51 +415,50 @@
             top: calc(14px + env(safe-area-inset-top));
             left: 0;
             right: 0;
-            padding: 0 18px;
+            padding: 0 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 60010;
         }
 
-        /* Freccia Indietro a sinistra */
-        .back-fullscreen-btn {
-            background-color: rgba(255, 255, 255, 0.16);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            padding: 8px 14px;
-            border-radius: 22px;
-            cursor: pointer;
-            display: inline-flex;
+        /* Semplice simbolo < identico alle frecce del carosello */
+        .back-icon-btn {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(215, 208, 196, 0.8);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+            color: #4A443D;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
         }
 
-        .back-fullscreen-btn:active {
-            background-color: rgba(255, 255, 255, 0.3);
+        .back-icon-btn:active {
+            transform: scale(0.92);
+            background-color: #ffffff;
         }
 
-        .back-fullscreen-btn svg {
-            width: 14px;
-            height: 14px;
-            stroke: #ffffff;
+        .back-icon-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: #4A443D;
         }
 
         /* Contatore foto a destra */
         .fullscreen-counter {
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 0.8rem;
+            color: #6E685F;
+            font-size: 0.85rem;
+            font-weight: 500;
             letter-spacing: 2px;
         }
 
         .fullscreen-swiper {
-            width: 100%;
+            width: 100vw;
             height: 100%;
         }
 
@@ -477,14 +466,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 55px 0 20px; /* Azzerato il padding laterale per toccare i bordi dello schermo */
+            width: 100vw;
+            padding: 54px 0 16px;
         }
 
+        /* Foto a piena larghezza che tocca i bordi destro e sinistro dello schermo */
         .fullscreen-swiper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Riempie lo schermo e tocca i bordi destro e sinistro */
-            border-radius: 0;
+            width: 100vw;
+            height: auto;
+            max-height: 86dvh;
+            object-fit: contain;
+            display: block;
         }
     </style>
 </head>
@@ -495,21 +487,10 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione con nome su un unico rigo e tasto griglia -->
+    <!-- Intestazione con scrittura a mano -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
-        <div class="view-controls">
-            <button class="grid-btn" onclick="openGridView()" aria-label="Visualizza tutte le foto">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-                Tutte le foto
-            </button>
-        </div>
     </header>
 
     <!-- Carosello Fotografico Principale -->
@@ -543,9 +524,21 @@
         </div>
     </div>
 
-    <footer>
-        QRicordi
-    </footer>
+    <!-- Parte inferiore: Tasto Tutte le foto + QRicordi -->
+    <div class="bottom-area">
+        <button class="grid-btn" onclick="openGridView()" aria-label="Visualizza tutte le foto">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Tutte le foto
+        </button>
+        <footer>
+            QRicordi
+        </footer>
+    </div>
 
     <!-- Vista Griglia stile Galleria iPhone -->
     <div id="grid-overlay">
@@ -566,16 +559,14 @@
         </div>
     </div>
 
-    <!-- Vista a Schermo Intero (Fullscreen Immersivo) -->
+    <!-- Vista a Schermo Intero su Sfondo Bianco Panna -->
     <div id="fullscreen-overlay">
         <div class="fullscreen-top-bar">
-            <!-- Freccia Indietro a sinistra -->
-            <button class="back-fullscreen-btn" onclick="closeFullscreen()">
+            <!-- Semplice simbolo < a sinistra -->
+            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna al carosello">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
+                    <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
-                Indietro
             </button>
             <!-- Contatore foto a destra -->
             <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
@@ -607,15 +598,17 @@
             centeredSlides: true,
             grabCursor: true,
             navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
+                nextEl: ".mySwiper .swiper-button-next",
+                prevEl: ".mySwiper .swiper-button-prev",
             },
         });
 
         const fsSwiper = new Swiper("#fsSwiper", {
             slidesPerView: 1,
-            spaceBetween: 20,
+            spaceBetween: 0,
             centeredSlides: true,
+            observer: true,
+            observeParents: true,
             on: {
                 slideChange: function () {
                     updateCounter(this.activeIndex);
@@ -643,17 +636,15 @@
         }
 
         function openFullscreen(index) {
+            const overlay = document.getElementById('fullscreen-overlay');
+            overlay.classList.add('active');
+            fsSwiper.update();
             fsSwiper.slideTo(index, 0);
             updateCounter(index);
-            document.getElementById('fullscreen-overlay').classList.add('active');
-            const metaTheme = document.getElementById('theme-meta');
-            if (metaTheme) metaTheme.setAttribute('content', '#0B0B0B');
         }
 
         function closeFullscreen() {
             document.getElementById('fullscreen-overlay').classList.remove('active');
-            const metaTheme = document.getElementById('theme-meta');
-            if (metaTheme) metaTheme.setAttribute('content', '#FBF9F5');
         }
     </script>
 </body>
