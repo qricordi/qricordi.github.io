@@ -7,7 +7,7 @@
     <title>Andrea & Alberta - Galleria Matrimonio</title>
     <!-- Google Fonts: Alex Brush e Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Libreria Swiper per il carosello -->
+    <!-- Libreria Swiper per la galleria -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
     <style>
@@ -49,7 +49,7 @@
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            animation: splashFadeOut 1.8s cubic-bezier(0.4, 0, 0.2, 1) 5.2s forwards;
+            animation: splashFadeOut 1.2s cubic-bezier(0.22, 1, 0.36, 1) 4.3s forwards;
         }
 
         #splash-screen img {
@@ -57,34 +57,30 @@
             max-height: 245px;
             object-fit: contain;
             opacity: 0;
-            animation: logoLinearZoom 6.2s linear 0.4s forwards;
+            will-change: opacity, filter, transform;
+            animation: logoCinematicEntrance 4.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
         }
 
-        @keyframes logoLinearZoom {
+        @keyframes logoCinematicEntrance {
             0% {
                 opacity: 0;
-                filter: blur(22px);
-                transform: scale(0.92);
-            }
-            25% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(0.97);
-            }
-            75% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(1.05);
-            }
-            90% {
-                opacity: 0.35;
                 filter: blur(12px);
-                transform: scale(1.085);
+                transform: translate3d(0, 0, 0) scale(0.94);
+            }
+            22% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: translate3d(0, 0, 0) scale(0.98);
+            }
+            72% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: translate3d(0, 0, 0) scale(1.035);
             }
             100% {
                 opacity: 0;
-                filter: blur(24px);
-                transform: scale(1.10);
+                filter: blur(10px);
+                transform: translate3d(0, 0, 0) scale(1.06);
             }
         }
 
@@ -100,7 +96,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE CON EFFETTO BLUR & ZOOM SINCRONIZZATO --- */
+        /* --- 2. INTESTAZIONE: CASCATA MORBIDA --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,27 +112,22 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            filter: blur(18px);
-            transform: scale(0.92);
+            filter: blur(10px);
+            transform: translate3d(0, 0, 0) scale(0.95);
             will-change: opacity, filter, transform;
-            animation: titleBlurZoom 4.4s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
+            animation: titleBlurZoom 2.4s cubic-bezier(0.16, 1, 0.3, 1) 4.7s forwards;
         }
 
         @keyframes titleBlurZoom {
             0% {
                 opacity: 0;
-                filter: blur(18px);
-                transform: scale(0.92);
-            }
-            35% {
-                opacity: 1;
-                filter: blur(8px);
-                transform: scale(0.96);
+                filter: blur(10px);
+                transform: translate3d(0, 0, 0) scale(0.95);
             }
             100% {
                 opacity: 1;
                 filter: blur(0px);
-                transform: scale(1);
+                transform: translate3d(0, 0, 0) scale(1);
             }
         }
 
@@ -147,11 +138,12 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Modificato: leggero ritardo (9.0s) e animazione più lenta (4.6s) */
-            animation: slowFadeRise 4.6s cubic-bezier(0.22, 1, 0.36, 1) 9.0s forwards;
+            transform: translate3d(0, 12px, 0);
+            will-change: opacity, transform;
+            animation: cascadeRise 1.6s cubic-bezier(0.16, 1, 0.3, 1) 5.5s forwards;
         }
 
-        /* --- 3. CAROSELLO FOTOGRAFICO --- */
+        /* --- 3. GALLERIA FOTOGRAFICA --- */
         .gallery-container {
             flex: 1;
             display: flex;
@@ -193,7 +185,9 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 9.6s forwards;
+            transform: translate3d(0, 16px, 0) scale(0.975);
+            will-change: opacity, transform;
+            animation: photoCascadeIn 1.9s cubic-bezier(0.16, 1, 0.3, 1) 6.2s forwards;
         }
 
         .photo-card:active {
@@ -210,18 +204,18 @@
             display: block;
         }
 
-        @keyframes slowPhotoReveal {
+        @keyframes photoCascadeIn {
             0% {
                 opacity: 0;
-                transform: scale(0.96) translateY(10px);
+                transform: translate3d(0, 16px, 0) scale(0.975);
             }
             100% {
                 opacity: 1;
-                transform: scale(1) translateY(0);
+                transform: translate3d(0, 0, 0) scale(1);
             }
         }
 
-        /* Frecce direzionali: anticipate di mezzo secondo (11.7s) */
+        /* Frecce direzionali */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -236,21 +230,23 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+            transform: translate3d(0, 10px, 0);
+            will-change: opacity, transform;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
+            animation: arrowsRiseIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 7.1s forwards;
         }
 
         @keyframes arrowsRiseIn {
             0% {
                 opacity: 0;
                 visibility: visible;
-                transform: translateY(14px);
+                transform: translate3d(0, 10px, 0);
                 pointer-events: none;
             }
             100% {
                 opacity: 1;
                 visibility: visible;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
                 pointer-events: auto;
             }
         }
@@ -303,7 +299,9 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 12.8s forwards;
+            transform: translate3d(0, 12px, 0);
+            will-change: opacity, transform;
+            animation: elementRiseIn 1.3s cubic-bezier(0.16, 1, 0.3, 1) 7.6s forwards;
         }
 
         .grid-btn:active {
@@ -326,17 +324,19 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.7s forwards;
+            transform: translate3d(0, 12px, 0);
+            will-change: opacity, transform;
+            animation: elementRiseIn 1.3s cubic-bezier(0.16, 1, 0.3, 1) 8.0s forwards;
         }
 
-        @keyframes slowFadeRise {
-            from {
+        @keyframes cascadeRise {
+            0% {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translate3d(0, 12px, 0);
             }
-            to {
+            100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
             }
         }
 
@@ -344,12 +344,12 @@
             0% {
                 opacity: 0;
                 visibility: visible;
-                transform: translateY(14px);
+                transform: translate3d(0, 12px, 0);
             }
             100% {
                 opacity: 1;
                 visibility: visible;
-                transform: translateY(0);
+                transform: translate3d(0, 0, 0);
             }
         }
 
@@ -529,7 +529,7 @@
 </head>
 <body>
 
-    <!-- Schermata Iniziale Chiara con Logo Nero -->
+    <!-- Schermata Iniziale Chiara con Logo -->
     <div id="splash-screen">
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
@@ -540,7 +540,7 @@
         <p>12 Settembre 2026</p>
     </header>
 
-    <!-- Carosello Fotografico Principale -->
+    <!-- Galleria Fotografica Principale -->
     <div class="gallery-container">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
@@ -609,7 +609,7 @@
     <!-- Vista a Schermo Intero su Sfondo Bianco Panna -->
     <div id="fullscreen-overlay">
         <div class="fullscreen-top-bar">
-            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna al carosello">
+            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna alla galleria">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
