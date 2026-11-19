@@ -57,7 +57,6 @@
             max-height: 245px;
             object-fit: contain;
             opacity: 0;
-            /* Zoom perfettamente fluido e lineare senza accelerazioni a scatti */
             animation: logoLinearZoom 6.2s linear 0.4s forwards;
         }
 
@@ -139,7 +138,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            animation: slowFadeRise 3.8s cubic-bezier(0.22, 1, 0.36, 1) 8.4s forwards;
+            /* Modificato: leggero ritardo (9.0s) e animazione più lenta (4.6s) */
+            animation: slowFadeRise 4.6s cubic-bezier(0.22, 1, 0.36, 1) 9.0s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -212,7 +212,7 @@
             }
         }
 
-        /* Frecce direzionali: nascoste rigorosamente all'avvio per evitare flash iniziali */
+        /* Frecce direzionali: anticipate di mezzo secondo (11.7s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -228,7 +228,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 12.2s forwards;
+            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -294,7 +294,7 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.2s forwards;
+            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 12.8s forwards;
         }
 
         .grid-btn:active {
@@ -317,7 +317,7 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 14.1s forwards;
+            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.7s forwards;
         }
 
         @keyframes slowFadeRise {
