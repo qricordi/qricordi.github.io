@@ -172,7 +172,7 @@
         .swiper.mySwiper {
             width: 100%;
             height: 100%;
-            max-height: 64dvh;
+            max-height: 60dvh;
             padding: 0 48px;
             position: relative;
         }
@@ -183,17 +183,18 @@
             align-items: center;
         }
 
-        /* Cornice bianca uniforme con padding costante su tutti i lati */
+        /* Cornice bianca che si adatta esattamente alle dimensioni della foto (uniforme su 4 lati) */
         .photo-card {
             background-color: #ffffff;
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
-            display: flex;
+            display: inline-flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
             max-width: 100%;
+            max-height: 100%;
+            margin: auto;
             cursor: zoom-in;
             transition: transform 0.2s ease;
         }
@@ -203,13 +204,10 @@
         }
 
         .photo-card img {
-            /* Manteniamo la larghezza fluida e aumentiamo l'altezza massima 
-               per fare in modo che le foto verticali diventino più grandi 
-               mantenendo intatta la cornice uniforme di 10px su ogni lato */
             width: auto;
             max-width: 100%;
-            height: 100%;
-            max-height: 60dvh;
+            height: auto;
+            max-height: 55dvh;
             object-fit: contain;
             border-radius: 4px;
             display: block;
@@ -253,7 +251,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Tasto spostato più in alto e distanziato */
             gap: 16px;
             padding: 0px 12px 18px;
             margin-top: -6px;
@@ -298,7 +295,6 @@
             font-weight: 500;
             color: #7A7268;
             letter-spacing: 2.5px;
-            /* Distanza aumentata tra il tasto e QRicordi */
             margin-top: 8px;
         }
 
@@ -654,4 +650,3 @@
     </script>
 </body>
 </html>
-```[cite: 3]
