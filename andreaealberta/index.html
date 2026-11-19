@@ -100,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE --- */
+        /* --- 2. INTESTAZIONE FLUIDA E SOVRAPPOSTA --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,7 +116,8 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            animation: titleBlurZoom 3.8s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
+            /* Inizia a 5.6s e dura 3.6s (termina a 9.2s) */
+            animation: titleBlurZoom 3.6s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
         }
 
         @keyframes titleBlurZoom {
@@ -139,8 +140,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Parte a 8.2s e dura 3.0s -> termina a 11.2s */
-            animation: slowFadeRise 3.0s cubic-bezier(0.22, 1, 0.36, 1) 8.2s forwards;
+            /* Inizia a 8.5s (mentre il nome sta finendo) e dura 2.5s (termina a 11.0s) */
+            animation: slowFadeRise 2.5s cubic-bezier(0.22, 1, 0.36, 1) 8.5s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -185,8 +186,8 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            /* Parte 0.25s dopo la fine della data (11.2s + 0.25s = 11.45s) e dura 4.2s per renderla più morbida */
-            animation: slowPhotoReveal 4.2s cubic-bezier(0.22, 1, 0.36, 1) 11.45s forwards;
+            /* Inizia subito alla fine della data (11.0s) e dura 3.8s (termina a 14.8s) */
+            animation: slowPhotoReveal 3.8s cubic-bezier(0.22, 1, 0.36, 1) 11.0s forwards;
         }
 
         .photo-card:active {
@@ -214,7 +215,7 @@
             }
         }
 
-        /* Frecce direzionali sincronizzate dopo la foto (14.2s) */
+        /* Frecce direzionali: partono esattamente a metà dell'animazione della foto (11.0s + 1.9s = 12.9s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -230,14 +231,14 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.2s forwards;
+            animation: arrowsRiseIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 12.9s forwards;
         }
 
         @keyframes arrowsRiseIn {
             0% {
                 opacity: 0;
                 visibility: visible;
-                transform: translateY(14px);
+                transform: translateY(10px);
                 pointer-events: none;
             }
             100% {
@@ -296,7 +297,7 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 15.0s forwards;
+            animation: elementRiseIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 14.2s forwards;
         }
 
         .grid-btn:active {
@@ -319,7 +320,7 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 15.7s forwards;
+            animation: elementRiseIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 14.8s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -337,7 +338,7 @@
             0% {
                 opacity: 0;
                 visibility: visible;
-                transform: translateY(14px);
+                transform: translateY(10px);
             }
             100% {
                 opacity: 1;
