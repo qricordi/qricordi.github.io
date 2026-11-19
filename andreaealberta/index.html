@@ -100,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE: BLUR E ZOOM PIÙ LENTI --- */
+        /* --- 2. INTESTAZIONE --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,7 +116,6 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            /* Durata portata a 3.8s per renderla più lenta e fluida */
             animation: titleBlurZoom 3.8s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
         }
 
@@ -186,8 +185,8 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            /* Attesa dimezzata: parte 0.5s dopo la fine della data (11.2s + 0.5s = 11.7s) */
-            animation: slowPhotoReveal 3.4s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
+            /* Parte 0.25s dopo la fine della data (11.2s + 0.25s = 11.45s) e dura 4.2s per renderla più morbida */
+            animation: slowPhotoReveal 4.2s cubic-bezier(0.22, 1, 0.36, 1) 11.45s forwards;
         }
 
         .photo-card:active {
@@ -207,7 +206,7 @@
         @keyframes slowPhotoReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.96) translateY(10px);
+                transform: scale(0.95) translateY(12px);
             }
             100% {
                 opacity: 1;
@@ -215,7 +214,7 @@
             }
         }
 
-        /* Frecce direzionali sincronizzate (13.3s) */
+        /* Frecce direzionali sincronizzate dopo la foto (14.2s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -231,7 +230,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 13.3s forwards;
+            animation: arrowsRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.2s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -297,7 +296,7 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.1s forwards;
+            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 15.0s forwards;
         }
 
         .grid-btn:active {
@@ -320,7 +319,7 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.8s forwards;
+            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 15.7s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -528,7 +527,7 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione con blur e zoom rallentati e sincronizzati -->
+    <!-- Intestazione -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
