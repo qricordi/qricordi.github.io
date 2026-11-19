@@ -100,22 +100,21 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE POSIZIONATA PIÙ IN BASSO CON EFFETTO SCRITTURA A MANO --- */
+        /* --- 2. INTESTAZIONE CON SCRITTURA A MANO --- */
         header {
             text-align: center;
-            padding: 34px 6px 4px; /* Spostato più in basso */
+            padding: 34px 6px 4px;
             flex-shrink: 0;
         }
 
         header h1 {
             font-family: 'Alex Brush', cursive;
-            font-size: clamp(2.8rem, 11.5vw, 4.5rem); /* Più grande */
+            font-size: clamp(2.8rem, 11.5vw, 4.5rem);
             white-space: nowrap;
             color: #3A3532;
             font-weight: normal;
             line-height: 1.15;
             padding: 0 8px;
-            /* Effetto scrittura a mano fluida da sinistra verso destra */
             clip-path: inset(0 100% 0 0);
             opacity: 0;
             animation: handwritingReveal 3.2s cubic-bezier(0.35, 0, 0.25, 1) 7.4s forwards;
@@ -139,7 +138,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            animation: slowFadeRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 9.4s forwards;
+            /* Modificato: durata aumentata a 3.2s per renderla più morbida e lenta */
+            animation: slowFadeRise 3.2s cubic-bezier(0.22, 1, 0.36, 1) 9.4s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -154,7 +154,8 @@
             padding: 4px 0;
             min-height: 0;
             opacity: 0;
-            animation: slowPhotoReveal 2.4s cubic-bezier(0.22, 1, 0.36, 1) 9.8s forwards;
+            /* Modificato: durata aumentata a 3.4s per una comparsa più lenta e fluida */
+            animation: slowPhotoReveal 3.4s cubic-bezier(0.22, 1, 0.36, 1) 9.8s forwards;
         }
 
         @keyframes slowPhotoReveal {
@@ -171,7 +172,7 @@
         .swiper.mySwiper {
             width: 100%;
             height: 100%;
-            max-height: 54dvh;
+            max-height: 56dvh;
             padding: 0 48px;
             position: relative;
         }
@@ -182,7 +183,7 @@
             align-items: center;
         }
 
-        /* Cornice bianca uniforme (~3mm) con angoli leggermente arrotondati */
+        /* Cornice bianca uniforme */
         .photo-card {
             background-color: #ffffff;
             padding: 10px;
@@ -202,14 +203,18 @@
         }
 
         .photo-card img {
+            /* Modificato: rimosso il vincolo rigido sull'altezza massima per le verticali, 
+               ora si adattano in proporzione alla larghezza delle quadrate riempiendo meglio lo spazio */
+            width: auto;
             max-width: 100%;
-            max-height: 49dvh;
+            height: auto;
+            max-height: 51dvh;
             object-fit: contain;
             border-radius: 4px;
             display: block;
         }
 
-        /* Frecce direzionali ben visibili e funzionanti */
+        /* Frecce direzionali */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -247,8 +252,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            padding: 4px 12px 22px;
+            /* Modificato: ridotto il gap complessivo e spostato il blocco più in alto */
+            gap: 16px;
+            padding: 0px 12px 18px;
+            margin-top: -6px;
             flex-shrink: 0;
             opacity: 0;
             animation: slowFadeRise 2s ease-out 10.6s forwards;
@@ -290,6 +297,8 @@
             font-weight: 500;
             color: #7A7268;
             letter-spacing: 2.5px;
+            /* Modificato: aggiunto margine superiore per aumentare la distanza dal tasto "Tutte le foto" */
+            margin-top: 6px;
         }
 
         @keyframes slowFadeRise {
@@ -392,7 +401,7 @@
         #fullscreen-overlay {
             position: fixed;
             inset: 0;
-            background-color: #FBF9F5; /* Stesso sfondo bianco panna della pagina principale */
+            background-color: #FBF9F5;
             z-index: 60000;
             display: flex;
             flex-direction: column;
@@ -422,7 +431,6 @@
             z-index: 60010;
         }
 
-        /* Semplice simbolo < identico alle frecce del carosello */
         .back-icon-btn {
             background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(215, 208, 196, 0.8);
@@ -449,7 +457,6 @@
             stroke: #4A443D;
         }
 
-        /* Contatore foto a destra */
         .fullscreen-counter {
             color: #6E685F;
             font-size: 0.85rem;
@@ -470,7 +477,6 @@
             padding: 54px 0 16px;
         }
 
-        /* Foto a piena larghezza che tocca i bordi destro e sinistro dello schermo */
         .fullscreen-swiper img {
             width: 100vw;
             height: auto;
@@ -562,13 +568,11 @@
     <!-- Vista a Schermo Intero su Sfondo Bianco Panna -->
     <div id="fullscreen-overlay">
         <div class="fullscreen-top-bar">
-            <!-- Semplice simbolo < a sinistra -->
             <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna al carosello">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
             </button>
-            <!-- Contatore foto a destra -->
             <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
         </div>
         <div class="swiper fullscreen-swiper" id="fsSwiper">
@@ -649,3 +653,4 @@
     </script>
 </body>
 </html>
+```[cite: 3]
