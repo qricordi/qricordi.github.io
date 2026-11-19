@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#000000" id="theme-meta">
+    <meta name="theme-color" content="#FBF9F5" id="theme-meta">
     <title>Andrea & Alberta - Galleria Matrimonio</title>
     <!-- Google Fonts: Alex Brush e Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
         }
 
         html {
-            background-color: #000000;
+            background-color: #FBF9F5; /* Sfondo bianco panna iniziale */
             height: 100%;
             width: 100%;
         }
@@ -38,13 +38,13 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* --- 1. SCHERMATA NERA E LOGO --- */
+        /* --- 1. SCHERMATA CHIARA E LOGO --- */
         #splash-screen {
             position: fixed;
             inset: 0;
             width: 100vw;
             height: 100vh;
-            background: radial-gradient(circle at center, #181818 0%, #000000 72%);
+            background-color: #FBF9F5; /* Schermata iniziale chiara */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -485,7 +485,7 @@
 </head>
 <body>
 
-    <!-- Schermata Iniziale -->
+    <!-- Schermata Iniziale Chiara con Logo Nero -->
     <div id="splash-screen">
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
@@ -587,12 +587,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        setTimeout(() => {
-            document.documentElement.style.backgroundColor = '#FBF9F5';
-            const metaTheme = document.getElementById('theme-meta');
-            if (metaTheme) metaTheme.setAttribute('content', '#FBF9F5');
-        }, 6400);
-
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
