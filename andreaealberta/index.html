@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#000000" id="theme-meta">
     <title>Andrea & Alberta - Galleria Matrimonio</title>
     <!-- Google Fonts: Alex Brush e Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <!-- Libreria Swiper per il carosello -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     
@@ -15,6 +15,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         html {
@@ -29,7 +30,7 @@
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             width: 100%;
-            height: 100dvh; /* Altezza reale visibile su smartphone senza scroll */
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -102,13 +103,12 @@
         /* --- 2. INTESTAZIONE --- */
         header {
             text-align: center;
-            padding: 16px 8px 4px;
+            padding: 14px 8px 2px;
             flex-shrink: 0;
         }
 
         header h1 {
             font-family: 'Alex Brush', cursive;
-            /* Nome su un unico rigo ingrandito quasi fino ai bordi */
             font-size: clamp(2.4rem, 10.2vw, 4.1rem);
             white-space: nowrap;
             color: #3A3532;
@@ -134,13 +134,52 @@
         }
 
         header p {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 3.5px;
             color: #8C857B;
-            margin-top: 4px;
+            margin-top: 2px;
             opacity: 0;
             animation: slowFadeRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 8.6s forwards;
+        }
+
+        /* Tasto elegante per aprire la griglia stile iOS */
+        .view-controls {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            animation: slowFadeRise 2s ease-out 10.2s forwards;
+        }
+
+        .grid-btn {
+            background-color: rgba(255, 255, 255, 0.85);
+            border: 1px solid #E5DFD5;
+            color: #5C554C;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+        }
+
+        .grid-btn:active {
+            transform: scale(0.96);
+            background-color: #F2EDE4;
+        }
+
+        .grid-btn svg {
+            width: 13px;
+            height: 13px;
+            stroke: #5C554C;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO E CORNICE UNIFORME --- */
@@ -172,8 +211,9 @@
         .swiper {
             width: 100%;
             height: 100%;
-            max-height: 64dvh;
-            padding: 0 48px; /* Spazio protetto per le frecce */
+            max-height: 58dvh;
+            padding: 0 46px;
+            overflow: hidden; /* Evita di mostrare i bordi delle foto laterali */
         }
 
         .swiper-slide {
@@ -182,7 +222,7 @@
             align-items: center;
         }
 
-        /* Cornice bianca uniforme (~3mm) con angoli leggermente arrotondati per ogni foto */
+        /* Cornice bianca uniforme (~3mm) con angoli leggermente arrotondati */
         .photo-card {
             background-color: #ffffff;
             padding: 10px;
@@ -193,23 +233,40 @@
             align-items: center;
             max-width: 100%;
             max-height: 100%;
+            cursor: zoom-in;
+            transition: transform 0.2s ease;
+        }
+
+        .photo-card:active {
+            transform: scale(0.985);
         }
 
         .photo-card img {
             max-width: 100%;
-            max-height: 58dvh;
+            max-height: 53dvh;
             object-fit: contain;
             border-radius: 4px;
             display: block;
         }
 
-        /* Frecce direzionali ben visibili e distanziate */
+        /* Frecce direzionali migliorate con cerchio morbido semitrasparente */
         .swiper-button-next, .swiper-button-prev {
-            color: #555048;
-            width: 36px;
-            height: 36px;
-            margin-top: -18px;
-            opacity: 0.85 !important;
+            color: #4A443D;
+            background-color: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(220, 213, 202, 0.7);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            margin-top: -17px;
+            opacity: 0 !important;
+            animation: arrowsDelayedReveal 2s ease-out 11s forwards;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .swiper-button-next:active, .swiper-button-prev:active {
+            transform: scale(0.92);
+            background-color: #ffffff;
         }
 
         .swiper-button-prev {
@@ -221,15 +278,24 @@
         }
 
         .swiper-button-next::after, .swiper-button-prev::after {
-            font-size: 20px;
-            font-weight: 500;
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        /* --- 4. FOOTER --- */
+        @keyframes arrowsDelayedReveal {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* --- 4. FOOTER POSIZIONATO PIÙ IN ALTO PER EVITARE BARRA SAFARI --- */
         footer {
             text-align: center;
-            padding: 8px 12px 16px;
-            font-size: 0.9rem;
+            padding: 4px 12px 24px;
+            font-size: 0.88rem;
             font-weight: 500;
             color: #7A7268;
             letter-spacing: 2.5px;
@@ -248,6 +314,172 @@
                 transform: translateY(0);
             }
         }
+
+        /* --- 5. VISTA GRIGLIA STILE GALLERIA iOS --- */
+        #grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #FBF9F5;
+            z-index: 50000;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        #grid-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 18px;
+            border-bottom: 1px solid #EAE4DA;
+            background-color: rgba(251, 249, 245, 0.95);
+        }
+
+        .grid-header span {
+            font-family: 'Alex Brush', cursive;
+            font-size: 1.9rem;
+            color: #3A3532;
+        }
+
+        .close-grid-btn {
+            background-color: #ffffff;
+            border: 1px solid #E2DCD2;
+            color: #3A3532;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 7px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .ios-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            align-content: start;
+        }
+
+        .ios-grid-item {
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 3px;
+            background-color: #EFECE6;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .ios-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.25s ease;
+        }
+
+        .ios-grid-item:active img {
+            transform: scale(0.95);
+        }
+
+        /* --- 6. VISUALIZZAZIONE A SCHERMO INTERO (LIGHTBOX) --- */
+        #fullscreen-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #0B0B0B;
+            z-index: 60000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        #fullscreen-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .fullscreen-top-bar {
+            position: absolute;
+            top: calc(14px + env(safe-area-inset-top));
+            left: 0;
+            right: 0;
+            padding: 0 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 60010;
+        }
+
+        .fullscreen-counter {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .close-fullscreen-btn {
+            background-color: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            border-radius: 22px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .close-fullscreen-btn:active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .fullscreen-swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .fullscreen-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 55px 12px 30px;
+        }
+
+        .fullscreen-swiper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -257,36 +489,47 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione con nome su un unico rigo -->
+    <!-- Intestazione con nome su un unico rigo e tasto griglia -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
+        <div class="view-controls">
+            <button class="grid-btn" onclick="openGridView()" aria-label="Visualizza tutte le foto">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Tutte le foto
+            </button>
+        </div>
     </header>
 
-    <!-- Carosello Fotografico -->
+    <!-- Carosello Fotografico Principale -->
     <div class="gallery-container">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto1.jpg" alt="Foto 1"></div>
+                    <div class="photo-card" onclick="openFullscreen(0)"><img src="foto1.jpg" alt="Foto 1"></div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto2.jpg" alt="Foto 2"></div>
+                    <div class="photo-card" onclick="openFullscreen(1)"><img src="foto2.jpg" alt="Foto 2"></div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto3.jpg" alt="Foto 3"></div>
+                    <div class="photo-card" onclick="openFullscreen(2)"><img src="foto3.jpg" alt="Foto 3"></div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto4.jpg" alt="Foto 4"></div>
+                    <div class="photo-card" onclick="openFullscreen(3)"><img src="foto4.jpg" alt="Foto 4"></div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto5.jpg" alt="Foto 5"></div>
+                    <div class="photo-card" onclick="openFullscreen(4)"><img src="foto5.jpg" alt="Foto 5"></div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto6.jpg" alt="Foto 6"></div>
+                    <div class="photo-card" onclick="openFullscreen(5)"><img src="foto6.jpg" alt="Foto 6"></div>
                 </div>
                 <div class="swiper-slide">
-                    <div class="photo-card"><img src="foto7.jpg" alt="Foto 7"></div>
+                    <div class="photo-card" onclick="openFullscreen(6)"><img src="foto7.jpg" alt="Foto 7"></div>
                 </div>
             </div>
             <div class="swiper-button-next"></div>
@@ -298,16 +541,59 @@
         QRicordi
     </footer>
 
+    <!-- Vista Griglia stile Galleria iPhone -->
+    <div id="grid-overlay">
+        <div class="grid-header">
+            <span>Andrea &amp; Alberta</span>
+            <button class="close-grid-btn" onclick="closeGridView()">
+                ✕ Carosello
+            </button>
+        </div>
+        <div class="ios-grid">
+            <div class="ios-grid-item" onclick="selectFromGrid(0)"><img src="foto1.jpg" alt="Foto 1"></div>
+            <div class="ios-grid-item" onclick="selectFromGrid(1)"><img src="foto2.jpg" alt="Foto 2"></div>
+            <div class="ios-grid-item" onclick="selectFromGrid(2)"><img src="foto3.jpg" alt="Foto 3"></div>
+            <div class="ios-grid-item" onclick="selectFromGrid(3)"><img src="foto4.jpg" alt="Foto 4"></div>
+            <div class="ios-grid-item" onclick="selectFromGrid(4)"><img src="foto5.jpg" alt="Foto 5"></div>
+            <div class="ios-grid-item" onclick="selectFromGrid(5)"><img src="foto6.jpg" alt="Foto 6"></div>
+            <div class="ios-grid-item" onclick="selectFromGrid(6)"><img src="foto7.jpg" alt="Foto 7"></div>
+        </div>
+    </div>
+
+    <!-- Vista a Schermo Intero (Lightbox) -->
+    <div id="fullscreen-overlay">
+        <div class="fullscreen-top-bar">
+            <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
+            <button class="close-fullscreen-btn" onclick="closeFullscreen()">
+                ✕ Chiudi
+            </button>
+        </div>
+        <div class="swiper fullscreen-swiper" id="fsSwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="foto1.jpg" alt="Foto 1"></div>
+                <div class="swiper-slide"><img src="foto2.jpg" alt="Foto 2"></div>
+                <div class="swiper-slide"><img src="foto3.jpg" alt="Foto 3"></div>
+                <div class="swiper-slide"><img src="foto4.jpg" alt="Foto 4"></div>
+                <div class="swiper-slide"><img src="foto5.jpg" alt="Foto 5"></div>
+                <div class="swiper-slide"><img src="foto6.jpg" alt="Foto 6"></div>
+                <div class="swiper-slide"><img src="foto7.jpg" alt="Foto 7"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // Cambio colore barra di stato telefono dopo lo splash screen
         setTimeout(() => {
             document.documentElement.style.backgroundColor = '#FBF9F5';
             const metaTheme = document.getElementById('theme-meta');
             if (metaTheme) metaTheme.setAttribute('content', '#FBF9F5');
         }, 6400);
 
+        // Carosello Principale
         const swiper = new Swiper(".mySwiper", {
-            spaceBetween: 24,
+            slidesPerView: 1,
+            spaceBetween: 30,
             centeredSlides: true,
             grabCursor: true,
             navigation: {
@@ -315,6 +601,53 @@
                 prevEl: ".swiper-button-prev",
             },
         });
+
+        // Carosello a Schermo Intero
+        const fsSwiper = new Swiper("#fsSwiper", {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            centeredSlides: true,
+            on: {
+                slideChange: function () {
+                    updateCounter(this.activeIndex);
+                    swiper.slideTo(this.activeIndex, 0);
+                }
+            }
+        });
+
+        function updateCounter(index) {
+            document.getElementById('fs-counter').textContent = (index + 1) + ' / 7';
+        }
+
+        // Funzioni Vista Griglia iOS
+        function openGridView() {
+            document.getElementById('grid-overlay').classList.add('active');
+        }
+
+        function closeGridView() {
+            document.getElementById('grid-overlay').classList.remove('active');
+        }
+
+        function selectFromGrid(index) {
+            closeGridView();
+            swiper.slideTo(index, 0);
+            openFullscreen(index);
+        }
+
+        // Funzioni Vista Schermo Intero
+        function openFullscreen(index) {
+            fsSwiper.slideTo(index, 0);
+            updateCounter(index);
+            document.getElementById('fullscreen-overlay').classList.add('active');
+            const metaTheme = document.getElementById('theme-meta');
+            if (metaTheme) metaTheme.setAttribute('content', '#0B0B0B');
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreen-overlay').classList.remove('active');
+            const metaTheme = document.getElementById('theme-meta');
+            if (metaTheme) metaTheme.setAttribute('content', '#FBF9F5');
+        }
     </script>
 </body>
 </html>
