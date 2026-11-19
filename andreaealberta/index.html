@@ -100,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE: BLUR E ZOOM TERMINANO INSIEME --- */
+        /* --- 2. INTESTAZIONE: BLUR E ZOOM PIÙ LENTI --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,15 +116,15 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            /* Durata 2.6s: blur e zoom arrivano a destinazione nello stesso identico momento */
-            animation: titleBlurZoom 2.6s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
+            /* Durata portata a 3.8s per renderla più lenta e fluida */
+            animation: titleBlurZoom 3.8s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
         }
 
         @keyframes titleBlurZoom {
             0% {
                 opacity: 0;
-                filter: blur(18px);
-                transform: scale(0.93);
+                filter: blur(20px);
+                transform: scale(0.92);
             }
             100% {
                 opacity: 1;
@@ -140,8 +140,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Parte a 7.8s e dura 3.2s -> termina completamente a 11.0s */
-            animation: slowFadeRise 3.2s cubic-bezier(0.22, 1, 0.36, 1) 7.8s forwards;
+            /* Parte a 8.2s e dura 3.0s -> termina a 11.2s */
+            animation: slowFadeRise 3.0s cubic-bezier(0.22, 1, 0.36, 1) 8.2s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -186,8 +186,8 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            /* Parte esattamente 1 secondo dopo la fine della data (11.0s + 1.0s = 12.0s) */
-            animation: slowPhotoReveal 3.6s cubic-bezier(0.22, 1, 0.36, 1) 12.0s forwards;
+            /* Attesa dimezzata: parte 0.5s dopo la fine della data (11.2s + 0.5s = 11.7s) */
+            animation: slowPhotoReveal 3.4s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
         }
 
         .photo-card:active {
@@ -215,7 +215,7 @@
             }
         }
 
-        /* Frecce direzionali sincronizzate (13.8s) */
+        /* Frecce direzionali sincronizzate (13.3s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -231,7 +231,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 13.8s forwards;
+            animation: arrowsRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 13.3s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -297,7 +297,7 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.6s forwards;
+            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.1s forwards;
         }
 
         .grid-btn:active {
@@ -320,7 +320,7 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 15.3s forwards;
+            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.8s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -528,7 +528,7 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione con blur e zoom sincronizzati -->
+    <!-- Intestazione con blur e zoom rallentati e sincronizzati -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
