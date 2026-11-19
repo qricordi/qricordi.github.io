@@ -121,9 +121,9 @@
         .ink-letter {
             display: inline-block;
             opacity: 0;
-            transform: translateY(8px) rotate(-4deg);
-            transform-origin: bottom left;
-            animation: inkStrokeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform: translate3d(0, 6px, 0);
+            will-change: transform, opacity;
+            animation: inkFluidIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .ink-space {
@@ -131,20 +131,14 @@
             width: 0.28em;
         }
 
-        @keyframes inkStrokeIn {
+        @keyframes inkFluidIn {
             0% {
                 opacity: 0;
-                transform: translateY(8px) rotate(-4deg);
-                filter: blur(2px);
-            }
-            65% {
-                opacity: 1;
-                filter: blur(0px);
+                transform: translate3d(0, 6px, 0);
             }
             100% {
                 opacity: 1;
-                transform: translateY(0) rotate(0deg);
-                filter: blur(0px);
+                transform: translate3d(0, 0, 0);
             }
         }
 
@@ -646,7 +640,7 @@
             titleEl.textContent = '';
 
             const startDelay = 6.6;
-            const step = 0.11;
+            const step = 0.085;
 
             [...text].forEach((char, idx) => {
                 if (char === ' ') {
@@ -660,7 +654,7 @@
                 const span = document.createElement('span');
                 span.className = 'ink-letter';
                 span.textContent = char;
-                span.style.animationDelay = `${(startDelay + idx * step).toFixed(2)}s`;
+                span.style.animationDelay = `${(startDelay + idx * step).toFixed(3)}s`;
                 titleEl.appendChild(span);
             });
         })();
@@ -724,4 +718,4 @@
 </html>
 ```[cite: 1]
 
-Se provandolo vuoi rendere la scrittura più lenta o più veloce, ti basta modificare `startDelay` e `step` dentro `animateTitleLetters()`[cite: 1].
+Provalo su iPhone e dimmi se così scorre liscio e se la frase in basso è sparita.
