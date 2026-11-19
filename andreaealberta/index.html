@@ -88,27 +88,6 @@
             }
         }
 
-        @keyframes titleZoomIn {
-            0% {
-                opacity: 0;
-                filter: blur(22px);
-                transform: scale(0.92);
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(1.05);
-            }
-            100% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(1.05);
-            }
-        }
-
         @keyframes splashFadeOut {
             0% {
                 opacity: 1;
@@ -121,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE --- */
+        /* --- 2. INTESTAZIONE CON EFFETTO BLUR & ZOOM SINCRONIZZATO --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -137,7 +116,28 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            animation: titleZoomIn 2.4s linear 5.6s forwards;
+            filter: blur(18px);
+            transform: scale(0.92);
+            will-change: opacity, filter, transform;
+            animation: titleBlurZoom 4.4s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
+        }
+
+        @keyframes titleBlurZoom {
+            0% {
+                opacity: 0;
+                filter: blur(18px);
+                transform: scale(0.92);
+            }
+            35% {
+                opacity: 1;
+                filter: blur(8px);
+                transform: scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: scale(1);
+            }
         }
 
         header p {
@@ -221,7 +221,7 @@
             }
         }
 
-        /* Frecce direzionali: anticipate di mezzo secondo (11.2s) */
+        /* Frecce direzionali: anticipate di mezzo secondo (11.7s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -237,7 +237,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.2s forwards;
+            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -273,7 +273,7 @@
             opacity: 0.3 !important;
         }
 
-        /* --- 4. SEZIONE INFERIORE: TASTO "TUTTE LE FOTO" --- */
+        /* --- 4. SEZIONE INFERIORE: TASTO "TUTTE LE FOTO" + FOOTER --- */
         .bottom-area {
             display: flex;
             flex-direction: column;
@@ -315,6 +315,18 @@
             width: 13px;
             height: 13px;
             stroke: #5C554C;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: #7A7268;
+            letter-spacing: 2.5px;
+            margin-top: 8px;
+            opacity: 0;
+            visibility: hidden;
+            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.7s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -522,7 +534,7 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione -->
+    <!-- Intestazione con scrittura a mano -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
@@ -559,7 +571,7 @@
         </div>
     </div>
 
-    <!-- Parte inferiore: Tasto Tutte le foto -->
+    <!-- Parte inferiore: Tasto Tutte le foto + QRicordi -->
     <div class="bottom-area">
         <button class="grid-btn" onclick="openGridView()" aria-label="Visualizza tutte le foto">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -570,6 +582,9 @@
             </svg>
             Tutte le foto
         </button>
+        <footer>
+            QRicordi
+        </footer>
     </div>
 
     <!-- Vista Griglia stile Galleria iPhone -->
@@ -594,7 +609,7 @@
     <!-- Vista a Schermo Intero su Sfondo Bianco Panna -->
     <div id="fullscreen-overlay">
         <div class="fullscreen-top-bar">
-            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna alla galleria">
+            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna al carosello">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
