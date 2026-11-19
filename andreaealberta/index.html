@@ -100,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE CON EFFETTO BLUR E ZOOM (SIMILE AL LOGO) --- */
+        /* --- 2. INTESTAZIONE: BLUR E ZOOM TERMINANO INSIEME --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,30 +116,20 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            /* Applicato effetto blur, zoom e dissolvenza morbida */
-            animation: titleBlurZoom 4.5s cubic-bezier(0.25, 0.1, 0.25, 1) 5.6s forwards;
+            /* Durata 2.6s: blur e zoom arrivano a destinazione nello stesso identico momento */
+            animation: titleBlurZoom 2.6s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
         }
 
         @keyframes titleBlurZoom {
             0% {
                 opacity: 0;
                 filter: blur(18px);
-                transform: scale(0.94);
-            }
-            30% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(1.00);
-            }
-            85% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(1.02);
+                transform: scale(0.93);
             }
             100% {
                 opacity: 1;
                 filter: blur(0px);
-                transform: scale(1.02);
+                transform: scale(1.00);
             }
         }
 
@@ -150,8 +140,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Data resa molto più lenta (5.0s) e posizionata a 9.2s */
-            animation: slowFadeRise 5.0s cubic-bezier(0.22, 1, 0.36, 1) 9.2s forwards;
+            /* Parte a 7.8s e dura 3.2s -> termina completamente a 11.0s */
+            animation: slowFadeRise 3.2s cubic-bezier(0.22, 1, 0.36, 1) 7.8s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -196,8 +186,8 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            /* Attesa di 1 secondo esatto dopo la fine della data (9.2s + 5.0s + 1.0s = 15.2s) */
-            animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 15.2s forwards;
+            /* Parte esattamente 1 secondo dopo la fine della data (11.0s + 1.0s = 12.0s) */
+            animation: slowPhotoReveal 3.6s cubic-bezier(0.22, 1, 0.36, 1) 12.0s forwards;
         }
 
         .photo-card:active {
@@ -225,7 +215,7 @@
             }
         }
 
-        /* Frecce direzionali sincronizzate dopo la comparsa della foto (17.3s) */
+        /* Frecce direzionali sincronizzate (13.8s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -241,7 +231,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 17.3s forwards;
+            animation: arrowsRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 13.8s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -307,7 +297,7 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 18.2s forwards;
+            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 14.6s forwards;
         }
 
         .grid-btn:active {
@@ -330,7 +320,7 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 19.0s forwards;
+            animation: elementRiseIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) 15.3s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -538,7 +528,7 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione con effetto blur e zoom -->
+    <!-- Intestazione con blur e zoom sincronizzati -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
