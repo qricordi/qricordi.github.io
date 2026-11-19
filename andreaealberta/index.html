@@ -88,6 +88,29 @@
             }
         }
 
+        @keyframes titleZoomIn {
+            0% {
+                opacity: 0;
+                filter: blur(22px);
+                transform: scale(0.92);
+            }
+            25% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: scale(0.97);
+            }
+            75% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0px);
+                transform: scale(1.05);
+            }
+        }
+
         @keyframes splashFadeOut {
             0% {
                 opacity: 1;
@@ -100,7 +123,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE CON ANIMAZIONE BLUR + ZOOM --- */
+        /* --- 2. INTESTAZIONE --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,20 +139,7 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            animation: titleBlurZoom 6.5s linear 5.6s forwards;
-        }
-
-        @keyframes titleBlurZoom {
-            0% {
-                opacity: 0;
-                filter: blur(22px);
-                transform: scale(0.92);
-            }
-            45%, 100% {
-                opacity: 1;
-                filter: blur(0px);
-                transform: scale(1);
-            }
+            animation: titleZoomIn 4.8s linear 5.6s forwards;
         }
 
         header p {
@@ -185,7 +195,7 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 10.6s forwards;
+            animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 9.6s forwards;
         }
 
         .photo-card:active {
@@ -213,7 +223,7 @@
             }
         }
 
-        /* Frecce direzionali: anticipate a 10.9s */
+        /* Frecce direzionali: anticipate di mezzo secondo (11.2s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -229,7 +239,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 10.9s forwards;
+            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.2s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -526,7 +536,7 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione con scrittura a mano -->
+    <!-- Intestazione -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
@@ -584,7 +594,7 @@
         <div class="grid-header">
             <span>Andrea &amp; Alberta</span>
             <button class="close-grid-btn" onclick="closeGridView()">
-                ✕ GALLERIA
+                ✕ Galleria
             </button>
         </div>
         <div class="ios-grid">
@@ -601,7 +611,7 @@
     <!-- Vista a Schermo Intero su Sfondo Bianco Panna -->
     <div id="fullscreen-overlay">
         <div class="fullscreen-top-bar">
-            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna al carosello">
+            <button class="back-icon-btn" onclick="closeFullscreen()" aria-label="Torna alla galleria">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
