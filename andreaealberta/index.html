@@ -143,7 +143,7 @@
             animation: slowFadeRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 8.6s forwards;
         }
 
-        /* Tasto elegante per aprire la griglia stile iOS */
+        /* Tasto griglia stile iOS */
         .view-controls {
             margin-top: 8px;
             display: flex;
@@ -213,7 +213,7 @@
             height: 100%;
             max-height: 58dvh;
             padding: 0 46px;
-            overflow: hidden; /* Evita di mostrare i bordi delle foto laterali */
+            overflow: hidden;
         }
 
         .swiper-slide {
@@ -222,7 +222,6 @@
             align-items: center;
         }
 
-        /* Cornice bianca uniforme (~3mm) con angoli leggermente arrotondati */
         .photo-card {
             background-color: #ffffff;
             padding: 10px;
@@ -249,7 +248,6 @@
             display: block;
         }
 
-        /* Frecce direzionali migliorate con cerchio morbido semitrasparente */
         .swiper-button-next, .swiper-button-prev {
             color: #4A443D;
             background-color: rgba(255, 255, 255, 0.85);
@@ -291,7 +289,7 @@
             }
         }
 
-        /* --- 4. FOOTER POSIZIONATO PIÙ IN ALTO PER EVITARE BARRA SAFARI --- */
+        /* --- 4. FOOTER --- */
         footer {
             text-align: center;
             padding: 4px 12px 24px;
@@ -400,7 +398,7 @@
             transform: scale(0.95);
         }
 
-        /* --- 6. VISUALIZZAZIONE A SCHERMO INTERO (LIGHTBOX) --- */
+        /* --- 6. VISTA A SCHERMO INTERO (FULLSCREEN IMMERSIVO) --- */
         #fullscreen-overlay {
             position: fixed;
             inset: 0;
@@ -434,13 +432,8 @@
             z-index: 60010;
         }
 
-        .fullscreen-counter {
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-        }
-
-        .close-fullscreen-btn {
+        /* Freccia Indietro a sinistra */
+        .back-fullscreen-btn {
             background-color: rgba(255, 255, 255, 0.16);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -458,8 +451,21 @@
             gap: 6px;
         }
 
-        .close-fullscreen-btn:active {
+        .back-fullscreen-btn:active {
             background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .back-fullscreen-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: #ffffff;
+        }
+
+        /* Contatore foto a destra */
+        .fullscreen-counter {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
         }
 
         .fullscreen-swiper {
@@ -471,14 +477,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 55px 12px 30px;
+            padding: 55px 0 20px; /* Azzerato il padding laterale per toccare i bordi dello schermo */
         }
 
         .fullscreen-swiper img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 2px;
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Riempie lo schermo e tocca i bordi destro e sinistro */
+            border-radius: 0;
         }
     </style>
 </head>
@@ -560,13 +566,19 @@
         </div>
     </div>
 
-    <!-- Vista a Schermo Intero (Lightbox) -->
+    <!-- Vista a Schermo Intero (Fullscreen Immersivo) -->
     <div id="fullscreen-overlay">
         <div class="fullscreen-top-bar">
-            <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
-            <button class="close-fullscreen-btn" onclick="closeFullscreen()">
-                ✕ Chiudi
+            <!-- Freccia Indietro a sinistra -->
+            <button class="back-fullscreen-btn" onclick="closeFullscreen()">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Indietro
             </button>
+            <!-- Contatore foto a destra -->
+            <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
         </div>
         <div class="swiper fullscreen-swiper" id="fsSwiper">
             <div class="swiper-wrapper">
@@ -583,14 +595,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // Cambio colore barra di stato telefono dopo lo splash screen
         setTimeout(() => {
             document.documentElement.style.backgroundColor = '#FBF9F5';
             const metaTheme = document.getElementById('theme-meta');
             if (metaTheme) metaTheme.setAttribute('content', '#FBF9F5');
         }, 6400);
 
-        // Carosello Principale
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
@@ -602,7 +612,6 @@
             },
         });
 
-        // Carosello a Schermo Intero
         const fsSwiper = new Swiper("#fsSwiper", {
             slidesPerView: 1,
             spaceBetween: 20,
@@ -619,7 +628,6 @@
             document.getElementById('fs-counter').textContent = (index + 1) + ' / 7';
         }
 
-        // Funzioni Vista Griglia iOS
         function openGridView() {
             document.getElementById('grid-overlay').classList.add('active');
         }
@@ -634,7 +642,6 @@
             openFullscreen(index);
         }
 
-        // Funzioni Vista Schermo Intero
         function openFullscreen(index) {
             fsSwiper.slideTo(index, 0);
             updateCounter(index);
