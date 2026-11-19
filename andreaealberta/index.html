@@ -49,7 +49,7 @@
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            animation: splashFadeOut 1.5s cubic-bezier(0.22, 1, 0.36, 1) 5.35s forwards;
+            animation: splashFadeOut 1.6s cubic-bezier(0.22, 1, 0.36, 1) 5.2s forwards;
         }
 
         #splash-screen img {
@@ -57,30 +57,27 @@
             max-height: 245px;
             object-fit: contain;
             opacity: 0;
-            will-change: opacity, filter, transform;
-            animation: logoCinematicEntrance 5.75s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+            transform: translate3d(0, 0, 0) scale(0.95);
+            will-change: opacity, transform;
+            animation: logoSmoothZoom 5.8s linear 0.35s forwards;
         }
 
-        @keyframes logoCinematicEntrance {
+        @keyframes logoSmoothZoom {
             0% {
                 opacity: 0;
-                filter: blur(12px);
-                transform: translate3d(0, 0, 0) scale(0.94);
+                transform: translate3d(0, 0, 0) scale(0.95);
             }
-            22% {
+            18% {
                 opacity: 1;
-                filter: blur(0px);
-                transform: translate3d(0, 0, 0) scale(0.98);
+                transform: translate3d(0, 0, 0) scale(0.967);
             }
-            72% {
+            78% {
                 opacity: 1;
-                filter: blur(0px);
-                transform: translate3d(0, 0, 0) scale(1.035);
+                transform: translate3d(0, 0, 0) scale(1.023);
             }
             100% {
                 opacity: 0;
-                filter: blur(10px);
-                transform: translate3d(0, 0, 0) scale(1.06);
+                transform: translate3d(0, 0, 0) scale(1.044);
             }
         }
 
