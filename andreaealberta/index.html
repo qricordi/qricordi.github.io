@@ -138,7 +138,7 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Durata aumentata a 3.2s per renderla più morbida e lenta */
+            /* Data più morbida e lenta (3.2s) */
             animation: slowFadeRise 3.2s cubic-bezier(0.22, 1, 0.36, 1) 9.4s forwards;
         }
 
@@ -154,7 +154,7 @@
             padding: 4px 0;
             min-height: 0;
             opacity: 0;
-            /* Durata aumentata a 3.4s per una comparsa più lenta e fluida della foto principale */
+            /* Foto principale più lenta e morbida (3.4s) */
             animation: slowPhotoReveal 3.4s cubic-bezier(0.22, 1, 0.36, 1) 9.8s forwards;
         }
 
@@ -172,7 +172,7 @@
         .swiper.mySwiper {
             width: 100%;
             height: 100%;
-            max-height: 60dvh;
+            max-height: 64dvh;
             padding: 0 48px;
             position: relative;
         }
@@ -183,7 +183,7 @@
             align-items: center;
         }
 
-        /* Cornice bianca uniforme */
+        /* Cornice bianca uniforme con padding costante su tutti i lati */
         .photo-card {
             background-color: #ffffff;
             padding: 10px;
@@ -192,8 +192,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100%;
             max-width: 100%;
-            max-height: 100%;
             cursor: zoom-in;
             transition: transform 0.2s ease;
         }
@@ -203,12 +203,13 @@
         }
 
         .photo-card img {
-            /* Forziamo una larghezza fissa e coerente per tutte le foto (sia quadrate che verticali),
-               in modo che occupino lo stesso spazio orizzontale senza toccare le frecce */
-            width: 290px;
+            /* Manteniamo la larghezza fluida e aumentiamo l'altezza massima 
+               per fare in modo che le foto verticali diventino più grandi 
+               mantenendo intatta la cornice uniforme di 10px su ogni lato */
+            width: auto;
             max-width: 100%;
-            height: auto;
-            max-height: 57dvh;
+            height: 100%;
+            max-height: 60dvh;
             object-fit: contain;
             border-radius: 4px;
             display: block;
@@ -252,6 +253,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* Tasto spostato più in alto e distanziato */
             gap: 16px;
             padding: 0px 12px 18px;
             margin-top: -6px;
@@ -296,6 +298,7 @@
             font-weight: 500;
             color: #7A7268;
             letter-spacing: 2.5px;
+            /* Distanza aumentata tra il tasto e QRicordi */
             margin-top: 8px;
         }
 
@@ -651,3 +654,4 @@
     </script>
 </body>
 </html>
+```[cite: 3]
