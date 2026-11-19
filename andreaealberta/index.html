@@ -49,35 +49,33 @@
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            /* Dissolvenza anticipata a 5.2s per collegarsi subito alla comparsa del nome */
             animation: splashFadeOut 1.8s cubic-bezier(0.4, 0, 0.2, 1) 5.2s forwards;
         }
 
         #splash-screen img {
-            /* Dimensioni aumentate leggermente */
             max-width: 82%;
             max-height: 245px;
             object-fit: contain;
             opacity: 0;
-            /* Ingresso molto più lento (45% della durata) e zoom più ampio */
-            animation: logoFluidAnimation 6.2s cubic-bezier(0.25, 0.1, 0.25, 1) 0.4s forwards;
+            /* Zoom perfettamente fluido e lineare senza accelerazioni a scatti */
+            animation: logoLinearZoom 6.2s linear 0.4s forwards;
         }
 
-        @keyframes logoFluidAnimation {
+        @keyframes logoLinearZoom {
             0% {
                 opacity: 0;
                 filter: blur(22px);
                 transform: scale(0.92);
             }
-            45% {
+            25% {
                 opacity: 1;
                 filter: blur(0px);
-                transform: scale(1.02);
+                transform: scale(0.97);
             }
             75% {
                 opacity: 1;
                 filter: blur(0px);
-                transform: scale(1.065);
+                transform: scale(1.05);
             }
             90% {
                 opacity: 0.35;
@@ -120,7 +118,6 @@
             padding: 0 8px;
             clip-path: inset(0 100% 0 0);
             opacity: 0;
-            /* Parte subito a 5.6s (senza attesa) e dura 4.4s (più lenta) */
             animation: handwritingReveal 4.4s cubic-bezier(0.35, 0, 0.25, 1) 5.6s forwards;
         }
 
@@ -142,7 +139,6 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Comparsa più lenta (3.8s) */
             animation: slowFadeRise 3.8s cubic-bezier(0.22, 1, 0.36, 1) 8.4s forwards;
         }
 
@@ -188,7 +184,6 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            /* La foto centrale compare lentamente (4.0s) a 9.6s */
             animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 9.6s forwards;
         }
 
@@ -217,7 +212,7 @@
             }
         }
 
-        /* Frecce direzionali: compaiono DOPO la foto centrale con leggero spostamento verso l'alto */
+        /* Frecce direzionali: nascoste rigorosamente all'avvio per evitare flash iniziali */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -230,6 +225,7 @@
             margin-top: -17px;
             z-index: 20;
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
             animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 12.2s forwards;
@@ -238,11 +234,13 @@
         @keyframes arrowsRiseIn {
             0% {
                 opacity: 0;
+                visibility: visible;
                 transform: translateY(14px);
                 pointer-events: none;
             }
             100% {
                 opacity: 1;
+                visibility: visible;
                 transform: translateY(0);
                 pointer-events: auto;
             }
@@ -295,7 +293,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             transition: all 0.25s ease;
             opacity: 0;
-            /* Compare dopo le frecce (13.2s) con lo stesso spostamento verso l'alto */
+            visibility: hidden;
             animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.2s forwards;
         }
 
@@ -318,7 +316,7 @@
             letter-spacing: 2.5px;
             margin-top: 8px;
             opacity: 0;
-            /* Compare dopo il tasto "Tutte le foto" (14.1s) con lo stesso spostamento verso l'alto */
+            visibility: hidden;
             animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 14.1s forwards;
         }
 
@@ -334,12 +332,14 @@
         }
 
         @keyframes elementRiseIn {
-            from {
+            0% {
                 opacity: 0;
+                visibility: visible;
                 transform: translateY(14px);
             }
-            to {
+            100% {
                 opacity: 1;
+                visibility: visible;
                 transform: translateY(0);
             }
         }
