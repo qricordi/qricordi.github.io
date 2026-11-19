@@ -100,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE FLUIDA E SOVRAPPOSTA --- */
+        /* --- 2. INTESTAZIONE CON ANIMAZIONE BLUR + ZOOM --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -116,20 +116,19 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            /* Inizia a 5.6s e dura 3.6s (termina a 9.2s) */
-            animation: titleBlurZoom 3.6s cubic-bezier(0.22, 1, 0.36, 1) 5.6s forwards;
+            animation: titleBlurZoom 7.5s linear 5.6s forwards;
         }
 
         @keyframes titleBlurZoom {
             0% {
                 opacity: 0;
-                filter: blur(20px);
+                filter: blur(22px);
                 transform: scale(0.92);
             }
-            100% {
+            45%, 100% {
                 opacity: 1;
                 filter: blur(0px);
-                transform: scale(1.00);
+                transform: scale(1);
             }
         }
 
@@ -140,8 +139,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Inizia a 8.5s (mentre il nome sta finendo) e dura 2.5s (termina a 11.0s) */
-            animation: slowFadeRise 2.5s cubic-bezier(0.22, 1, 0.36, 1) 8.5s forwards;
+            /* Modificato: leggero ritardo (9.0s) e animazione più lenta (4.6s) */
+            animation: slowFadeRise 4.6s cubic-bezier(0.22, 1, 0.36, 1) 9.0s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -186,8 +185,7 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            /* Inizia subito alla fine della data (11.0s) e dura 3.8s (termina a 14.8s) */
-            animation: slowPhotoReveal 3.8s cubic-bezier(0.22, 1, 0.36, 1) 11.0s forwards;
+            animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 9.6s forwards;
         }
 
         .photo-card:active {
@@ -207,7 +205,7 @@
         @keyframes slowPhotoReveal {
             0% {
                 opacity: 0;
-                transform: scale(0.95) translateY(12px);
+                transform: scale(0.96) translateY(10px);
             }
             100% {
                 opacity: 1;
@@ -215,7 +213,7 @@
             }
         }
 
-        /* Frecce direzionali: partono esattamente a metà dell'animazione della foto (11.0s + 1.9s = 12.9s) */
+        /* Frecce direzionali: anticipate di mezzo secondo (11.7s) */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -231,14 +229,14 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 12.9s forwards;
+            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
         }
 
         @keyframes arrowsRiseIn {
             0% {
                 opacity: 0;
                 visibility: visible;
-                transform: translateY(10px);
+                transform: translateY(14px);
                 pointer-events: none;
             }
             100% {
@@ -297,7 +295,7 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 14.2s forwards;
+            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 12.8s forwards;
         }
 
         .grid-btn:active {
@@ -320,7 +318,7 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.5s cubic-bezier(0.22, 1, 0.36, 1) 14.8s forwards;
+            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.7s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -338,7 +336,7 @@
             0% {
                 opacity: 0;
                 visibility: visible;
-                transform: translateY(10px);
+                transform: translateY(14px);
             }
             100% {
                 opacity: 1;
@@ -528,7 +526,7 @@
         <img src="logo.png" alt="Logo Studio Fotografico">
     </div>
 
-    <!-- Intestazione -->
+    <!-- Intestazione con scrittura a mano -->
     <header>
         <h1>Andrea &amp; Alberta</h1>
         <p>12 Settembre 2026</p>
@@ -586,7 +584,7 @@
         <div class="grid-header">
             <span>Andrea &amp; Alberta</span>
             <button class="close-grid-btn" onclick="closeGridView()">
-                ✕ Carosello
+                ✕ GALLERIA
             </button>
         </div>
         <div class="ios-grid">
