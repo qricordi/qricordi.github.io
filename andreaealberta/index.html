@@ -138,8 +138,8 @@
             color: #8C857B;
             margin-top: 6px;
             opacity: 0;
-            /* Modificato: leggero ritardo (9.0s) e animazione più lenta (4.6s) */
-            animation: slowFadeRise 4.6s cubic-bezier(0.22, 1, 0.36, 1) 9.0s forwards;
+            /* Data nettamente più lenta (6.2s) */
+            animation: slowFadeRise 6.2s ease-in-out 9.0s forwards;
         }
 
         /* --- 3. CAROSELLO FOTOGRAFICO --- */
@@ -184,7 +184,8 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            animation: slowPhotoReveal 4.0s cubic-bezier(0.22, 1, 0.36, 1) 9.6s forwards;
+            /* Ritardata di mezzo secondo (10.1s) e durata aumentata a 5.2s */
+            animation: slowPhotoReveal 5.2s ease-in-out 10.1s forwards;
         }
 
         .photo-card:active {
@@ -212,7 +213,7 @@
             }
         }
 
-        /* Frecce direzionali: anticipate di mezzo secondo (11.7s) */
+        /* Frecce direzionali: anticipate a 11.1s */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -228,7 +229,7 @@
             visibility: hidden;
             pointer-events: none;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 11.7s forwards;
+            animation: arrowsRiseIn 2.2s ease-in-out 11.1s forwards;
         }
 
         @keyframes arrowsRiseIn {
@@ -294,7 +295,8 @@
             transition: all 0.25s ease;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 12.8s forwards;
+            /* Animazione più lenta (3.2s) */
+            animation: elementRiseIn 3.2s ease-in-out 12.2s forwards;
         }
 
         .grid-btn:active {
@@ -317,7 +319,8 @@
             margin-top: 8px;
             opacity: 0;
             visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.7s forwards;
+            /* Animazione più lenta (3.2s) */
+            animation: elementRiseIn 3.2s ease-in-out 13.2s forwards;
         }
 
         @keyframes slowFadeRise {
