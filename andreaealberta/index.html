@@ -137,7 +137,7 @@
             line-height: 1.15;
             padding: 0 8px;
             opacity: 0;
-            animation: titleZoomIn 4.8s linear 5.6s forwards;
+            animation: titleZoomIn 2.4s linear 5.6s forwards;
         }
 
         header p {
@@ -273,7 +273,7 @@
             opacity: 0.3 !important;
         }
 
-        /* --- 4. SEZIONE INFERIORE: TASTO "TUTTE LE FOTO" + FOOTER --- */
+        /* --- 4. SEZIONE INFERIORE: TASTO "TUTTE LE FOTO" --- */
         .bottom-area {
             display: flex;
             flex-direction: column;
@@ -315,18 +315,6 @@
             width: 13px;
             height: 13px;
             stroke: #5C554C;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: #7A7268;
-            letter-spacing: 2.5px;
-            margin-top: 8px;
-            opacity: 0;
-            visibility: hidden;
-            animation: elementRiseIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) 13.7s forwards;
         }
 
         @keyframes slowFadeRise {
@@ -571,7 +559,7 @@
         </div>
     </div>
 
-    <!-- Parte inferiore: Tasto Tutte le foto + QRicordi -->
+    <!-- Parte inferiore: Tasto Tutte le foto -->
     <div class="bottom-area">
         <button class="grid-btn" onclick="openGridView()" aria-label="Visualizza tutte le foto">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -582,9 +570,6 @@
             </svg>
             Tutte le foto
         </button>
-        <footer>
-            QRicordi
-        </footer>
     </div>
 
     <!-- Vista Griglia stile Galleria iPhone -->
@@ -688,4 +673,3 @@
     </script>
 </body>
 </html>
-```[cite: 1]
