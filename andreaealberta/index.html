@@ -222,7 +222,7 @@
             }
         }
 
-        /* Frecce direzionali: ingresso morbido e continuo */
+        /* Frecce direzionali: ingresso stabile e sincronizzato */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -236,21 +236,21 @@
             z-index: 20;
             opacity: 0;
             pointer-events: none;
-            transform: translate3d(0, 5px, 0) scale(0.95);
+            transform: translate3d(0, 4px, 0);
             will-change: opacity, transform;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: arrowsCinematicIn 2.3s cubic-bezier(0.22, 1, 0.36, 1) 9.45s forwards;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            animation: arrowsCinematicIn 1.4s cubic-bezier(0.22, 1, 0.36, 1) 10.35s forwards;
         }
 
         @keyframes arrowsCinematicIn {
             0% {
                 opacity: 0;
-                transform: translate3d(0, 5px, 0) scale(0.95);
+                transform: translate3d(0, 4px, 0);
                 pointer-events: none;
             }
             100% {
                 opacity: 1;
-                transform: translate3d(0, 0, 0) scale(1);
+                transform: translate3d(0, 0, 0);
                 pointer-events: auto;
             }
         }
@@ -270,7 +270,7 @@
         }
 
         .mySwiper .swiper-button-disabled {
-            opacity: 0.3 !important;
+            opacity: 0.3;
         }
 
         /* --- 4. SEZIONE INFERIORE: TASTO "TUTTE LE FOTO" + FOOTER --- */
@@ -305,7 +305,7 @@
             pointer-events: none;
             transform: translate3d(0, 7px, 0);
             will-change: opacity, transform;
-            animation: fluidRiseInteractive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 10.15s forwards;
+            animation: fluidRiseInteractive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 10.75s forwards;
         }
 
         .grid-btn:active {
@@ -330,7 +330,7 @@
             pointer-events: none;
             transform: translate3d(0, 7px, 0);
             will-change: opacity, transform;
-            animation: fluidRiseInteractive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 10.75s forwards;
+            animation: fluidRiseInteractive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 11.25s forwards;
         }
 
         @keyframes fluidRise {
