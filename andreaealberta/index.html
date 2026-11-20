@@ -38,7 +38,7 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* --- 1. SCHERMATA CHIARA E LOGO (INVARIATO) --- */
+        /* --- 1. SCHERMATA CHIARA E LOGO --- */
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -463,6 +463,12 @@
             z-index: 60010;
         }
 
+        .fullscreen-top-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .back-icon-btn {
             background-color: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(215, 208, 196, 0.8);
@@ -489,11 +495,65 @@
             stroke: #4A443D;
         }
 
+        .share-btn {
+            background-color: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(215, 208, 196, 0.85);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+            color: #4A443D;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            height: 36px;
+            padding: 0 14px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .share-btn:active {
+            transform: scale(0.95);
+            background-color: #F2EDE4;
+        }
+
+        .share-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: #4A443D;
+        }
+
         .fullscreen-counter {
             color: #6E685F;
             font-size: 0.85rem;
             font-weight: 500;
             letter-spacing: 2px;
+        }
+
+        .share-toast {
+            position: fixed;
+            bottom: calc(28px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background-color: rgba(58, 53, 50, 0.92);
+            color: #FBF9F5;
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 60020;
+            white-space: nowrap;
+        }
+
+        .share-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         .fullscreen-swiper {
@@ -583,7 +643,7 @@
         <div class="grid-header">
             <span>Andrea &amp; Alberta</span>
             <button class="close-grid-btn" onclick="closeGridView()">
-                ✕ Galleria
+                Galleria
             </button>
         </div>
         <div class="ios-grid">
@@ -605,7 +665,17 @@
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
             </button>
-            <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
+            <div class="fullscreen-top-right">
+                <span class="fullscreen-counter" id="fs-counter">1 / 7</span>
+                <button class="share-btn" onclick="shareCurrentPhoto()" aria-label="Condividi foto">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                        <polyline points="16 6 12 2 8 6"></polyline>
+                        <line x1="12" y1="2" x2="12" y2="15"></line>
+                    </svg>
+                    Condividi
+                </button>
+            </div>
         </div>
         <div class="swiper fullscreen-swiper" id="fsSwiper">
             <div class="swiper-wrapper">
@@ -618,10 +688,21 @@
                 <div class="swiper-slide"><img src="foto7.jpg" alt="Foto 7"></div>
             </div>
         </div>
+        <div class="share-toast" id="share-toast">Link copiato</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        const photos = [
+            "foto1.jpg",
+            "foto2.jpg",
+            "foto3.jpg",
+            "foto4.jpg",
+            "foto5.jpg",
+            "foto6.jpg",
+            "foto7.jpg"
+        ];
+
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
@@ -648,7 +729,7 @@
         });
 
         function updateCounter(index) {
-            document.getElementById('fs-counter').textContent = (index + 1) + ' / 7';
+            document.getElementById('fs-counter').textContent = (index + 1) + ' / ' + photos.length;
         }
 
         function openGridView() {
@@ -675,6 +756,66 @@
 
         function closeFullscreen() {
             document.getElementById('fullscreen-overlay').classList.remove('active');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('share-toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(window.shareToastTimeout);
+            window.shareToastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2200);
+        }
+
+        async function shareCurrentPhoto() {
+            const index = fsSwiper.activeIndex || 0;
+            const fileName = photos[index];
+            const photoUrl = new URL(fileName, window.location.href).href;
+            const shareTitle = "Andrea & Alberta - Foto " + (index + 1);
+
+            if (navigator.share) {
+                try {
+                    const response = await fetch(photoUrl);
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        const mimeType = blob.type || "image/jpeg";
+                        const file = new File([blob], fileName, { type: mimeType });
+
+                        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                            await navigator.share({
+                                title: shareTitle,
+                                text: "Andrea & Alberta - 12 Settembre 2026",
+                                files: [file]
+                            });
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    if (err && err.name === "AbortError") return;
+                }
+
+                try {
+                    await navigator.share({
+                        title: shareTitle,
+                        text: "Andrea & Alberta - 12 Settembre 2026",
+                        url: photoUrl
+                    });
+                    return;
+                } catch (err) {
+                    if (err && err.name === "AbortError") return;
+                }
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(photoUrl);
+                    showToast("Link della foto copiato");
+                    return;
+                } catch (err) {}
+            }
+
+            showToast("Condivisione non supportata su questo dispositivo");
         }
     </script>
 </body>
