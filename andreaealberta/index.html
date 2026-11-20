@@ -100,7 +100,7 @@
             }
         }
 
-        /* --- 2. INTESTAZIONE: CASCATA LENTA E MORBIDA --- */
+        /* --- 2. INTESTAZIONE: CASCATA CINEMATICA --- */
         header {
             text-align: center;
             padding: 34px 6px 4px;
@@ -119,7 +119,7 @@
             filter: blur(8px);
             transform: translate3d(0, 8px, 0) scale(0.985);
             will-change: opacity, filter, transform;
-            animation: titleFluidIn 2.9s cubic-bezier(0.22, 1, 0.36, 1) 6.35s forwards;
+            animation: titleFluidIn 3.1s cubic-bezier(0.22, 1, 0.36, 1) 6.35s forwards;
         }
 
         @keyframes titleFluidIn {
@@ -144,7 +144,7 @@
             opacity: 0;
             transform: translate3d(0, 8px, 0);
             will-change: opacity, transform;
-            animation: fluidRise 2.2s cubic-bezier(0.22, 1, 0.36, 1) 7.25s forwards;
+            animation: fluidRise 2.5s cubic-bezier(0.22, 1, 0.36, 1) 7.35s forwards;
         }
 
         /* --- 3. GALLERIA FOTOGRAFICA --- */
@@ -189,9 +189,10 @@
             cursor: zoom-in;
             transition: transform 0.2s ease;
             opacity: 0;
-            transform: translate3d(0, 10px, 0) scale(0.988);
-            will-change: opacity, transform;
-            animation: photoFluidIn 2.6s cubic-bezier(0.22, 1, 0.36, 1) 7.95s forwards;
+            filter: blur(6px);
+            transform: translate3d(0, 10px, 0) scale(0.985);
+            will-change: opacity, filter, transform;
+            animation: photoFluidIn 3.4s cubic-bezier(0.22, 1, 0.36, 1) 8.05s forwards;
         }
 
         .photo-card:active {
@@ -211,15 +212,17 @@
         @keyframes photoFluidIn {
             0% {
                 opacity: 0;
-                transform: translate3d(0, 10px, 0) scale(0.988);
+                filter: blur(6px);
+                transform: translate3d(0, 10px, 0) scale(0.985);
             }
             100% {
                 opacity: 1;
+                filter: blur(0px);
                 transform: translate3d(0, 0, 0) scale(1);
             }
         }
 
-        /* Frecce direzionali */
+        /* Frecce direzionali: ingresso morbido e continuo */
         .mySwiper .swiper-button-next,
         .mySwiper .swiper-button-prev {
             color: #4A443D;
@@ -232,12 +235,24 @@
             margin-top: -17px;
             z-index: 20;
             opacity: 0;
-            visibility: hidden;
             pointer-events: none;
-            transform: translate3d(0, 8px, 0);
+            transform: translate3d(0, 5px, 0) scale(0.95);
             will-change: opacity, transform;
             transition: transform 0.2s ease, background-color 0.2s ease;
-            animation: fluidRiseInteractive 1.9s cubic-bezier(0.22, 1, 0.36, 1) 8.95s forwards;
+            animation: arrowsCinematicIn 2.3s cubic-bezier(0.22, 1, 0.36, 1) 9.45s forwards;
+        }
+
+        @keyframes arrowsCinematicIn {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 5px, 0) scale(0.95);
+                pointer-events: none;
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0) scale(1);
+                pointer-events: auto;
+            }
         }
 
         .mySwiper .swiper-button-prev {
@@ -287,10 +302,10 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             transition: all 0.25s ease;
             opacity: 0;
-            visibility: hidden;
-            transform: translate3d(0, 8px, 0);
+            pointer-events: none;
+            transform: translate3d(0, 7px, 0);
             will-change: opacity, transform;
-            animation: fluidRiseInteractive 1.9s cubic-bezier(0.22, 1, 0.36, 1) 9.55s forwards;
+            animation: fluidRiseInteractive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 10.15s forwards;
         }
 
         .grid-btn:active {
@@ -312,10 +327,10 @@
             letter-spacing: 2.5px;
             margin-top: 8px;
             opacity: 0;
-            visibility: hidden;
-            transform: translate3d(0, 8px, 0);
+            pointer-events: none;
+            transform: translate3d(0, 7px, 0);
             will-change: opacity, transform;
-            animation: fluidRiseInteractive 1.9s cubic-bezier(0.22, 1, 0.36, 1) 10.15s forwards;
+            animation: fluidRiseInteractive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 10.75s forwards;
         }
 
         @keyframes fluidRise {
@@ -332,13 +347,11 @@
         @keyframes fluidRiseInteractive {
             0% {
                 opacity: 0;
-                visibility: visible;
-                transform: translate3d(0, 8px, 0);
+                transform: translate3d(0, 7px, 0);
                 pointer-events: none;
             }
             100% {
                 opacity: 1;
-                visibility: visible;
                 transform: translate3d(0, 0, 0);
                 pointer-events: auto;
             }
