@@ -594,29 +594,7 @@
     <!-- Galleria Fotografica Principale -->
     <div class="gallery-container">
         <div class="swiper mySwiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(0)"><img src="foto1.jpg" alt="Foto 1"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(1)"><img src="foto2.jpg" alt="Foto 2"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(2)"><img src="foto3.jpg" alt="Foto 3"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(3)"><img src="foto4.jpg" alt="Foto 4"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(4)"><img src="foto5.jpg" alt="Foto 5"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(5)"><img src="foto6.jpg" alt="Foto 6"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="photo-card" onclick="openFullscreen(6)"><img src="foto7.jpg" alt="Foto 7"></div>
-                </div>
-            </div>
+            <div class="swiper-wrapper" id="main-swiper-wrapper"></div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>
         </div>
@@ -646,15 +624,7 @@
                 Galleria
             </button>
         </div>
-        <div class="ios-grid">
-            <div class="ios-grid-item" onclick="selectFromGrid(0)"><img src="foto1.jpg" alt="Foto 1"></div>
-            <div class="ios-grid-item" onclick="selectFromGrid(1)"><img src="foto2.jpg" alt="Foto 2"></div>
-            <div class="ios-grid-item" onclick="selectFromGrid(2)"><img src="foto3.jpg" alt="Foto 3"></div>
-            <div class="ios-grid-item" onclick="selectFromGrid(3)"><img src="foto4.jpg" alt="Foto 4"></div>
-            <div class="ios-grid-item" onclick="selectFromGrid(4)"><img src="foto5.jpg" alt="Foto 5"></div>
-            <div class="ios-grid-item" onclick="selectFromGrid(5)"><img src="foto6.jpg" alt="Foto 6"></div>
-            <div class="ios-grid-item" onclick="selectFromGrid(6)"><img src="foto7.jpg" alt="Foto 7"></div>
-        </div>
+        <div class="ios-grid" id="ios-grid"></div>
     </div>
 
     <!-- Vista a Schermo Intero su Sfondo Bianco Panna -->
@@ -678,21 +648,14 @@
             </div>
         </div>
         <div class="swiper fullscreen-swiper" id="fsSwiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="foto1.jpg" alt="Foto 1"></div>
-                <div class="swiper-slide"><img src="foto2.jpg" alt="Foto 2"></div>
-                <div class="swiper-slide"><img src="foto3.jpg" alt="Foto 3"></div>
-                <div class="swiper-slide"><img src="foto4.jpg" alt="Foto 4"></div>
-                <div class="swiper-slide"><img src="foto5.jpg" alt="Foto 5"></div>
-                <div class="swiper-slide"><img src="foto6.jpg" alt="Foto 6"></div>
-                <div class="swiper-slide"><img src="foto7.jpg" alt="Foto 7"></div>
-            </div>
+            <div class="swiper-wrapper" id="fs-swiper-wrapper"></div>
         </div>
         <div class="share-toast" id="share-toast">Link copiato</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // Aggiungi qui in futuro tutti i file delle foto (es. "foto8.jpg", ..., "foto150.jpg")
         const photos = [
             "foto1.jpg",
             "foto2.jpg",
@@ -703,6 +666,37 @@
             "foto7.jpg"
         ];
 
+        const GRID_BATCH_SIZE = 24;
+        let renderedGridCount = 0;
+
+        const mainWrapper = document.getElementById("main-swiper-wrapper");
+        const fsWrapper = document.getElementById("fs-swiper-wrapper");
+        const iosGrid = document.getElementById("ios-grid");
+
+        function buildSwipers() {
+            photos.forEach((src, index) => {
+                const loadMode = index === 0 ? "eager" : "lazy";
+
+                const mainSlide = document.createElement("div");
+                mainSlide.className = "swiper-slide";
+                mainSlide.innerHTML = `
+                    <div class="photo-card" onclick="openFullscreen(${index})">
+                        <img src="${src}" alt="Foto ${index + 1}" loading="${loadMode}" decoding="async">
+                    </div>
+                `;
+                mainWrapper.appendChild(mainSlide);
+
+                const fsSlide = document.createElement("div");
+                fsSlide.className = "swiper-slide";
+                fsSlide.innerHTML = `
+                    <img src="${src}" alt="Foto ${index + 1}" loading="lazy" decoding="async">
+                `;
+                fsWrapper.appendChild(fsSlide);
+            });
+        }
+
+        buildSwipers();
+
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
@@ -712,6 +706,11 @@
                 nextEl: ".mySwiper .swiper-button-next",
                 prevEl: ".mySwiper .swiper-button-prev",
             },
+            on: {
+                slideChange: function () {
+                    preloadPhoto(this.activeIndex + 1);
+                }
+            }
         });
 
         const fsSwiper = new Swiper("#fsSwiper", {
@@ -724,6 +723,7 @@
                 slideChange: function () {
                     updateCounter(this.activeIndex);
                     swiper.slideTo(this.activeIndex, 0);
+                    preloadPhoto(this.activeIndex + 1);
                 }
             }
         });
@@ -732,7 +732,43 @@
             document.getElementById('fs-counter').textContent = (index + 1) + ' / ' + photos.length;
         }
 
+        function preloadPhoto(index) {
+            if (index >= 0 && index < photos.length) {
+                const img = new Image();
+                img.decoding = "async";
+                img.src = photos[index];
+            }
+        }
+
+        function appendGridBatch(batchSize = GRID_BATCH_SIZE) {
+            if (renderedGridCount >= photos.length) return;
+
+            const end = Math.min(renderedGridCount + batchSize, photos.length);
+            const fragment = document.createDocumentFragment();
+
+            for (let i = renderedGridCount; i < end; i++) {
+                const item = document.createElement("div");
+                item.className = "ios-grid-item";
+                item.onclick = () => selectFromGrid(i);
+                item.innerHTML = `<img src="${photos[i]}" alt="Foto ${i + 1}" loading="lazy" decoding="async">`;
+                fragment.appendChild(item);
+            }
+
+            iosGrid.appendChild(fragment);
+            renderedGridCount = end;
+        }
+
+        iosGrid.addEventListener("scroll", () => {
+            const nearBottom = iosGrid.scrollTop + iosGrid.clientHeight >= iosGrid.scrollHeight - 250;
+            if (nearBottom) {
+                appendGridBatch(GRID_BATCH_SIZE);
+            }
+        }, { passive: true });
+
         function openGridView() {
+            if (renderedGridCount === 0) {
+                appendGridBatch(GRID_BATCH_SIZE);
+            }
             document.getElementById('grid-overlay').classList.add('active');
         }
 
@@ -747,6 +783,8 @@
         }
 
         function openFullscreen(index) {
+            preloadPhoto(index);
+            preloadPhoto(index + 1);
             const overlay = document.getElementById('fullscreen-overlay');
             overlay.classList.add('active');
             fsSwiper.update();
