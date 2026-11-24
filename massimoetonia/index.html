@@ -422,10 +422,17 @@
             object-position: center;
             color: transparent;
             display: block;
-            transition: transform 0.25s ease;
+            opacity: 0;
+            transform: scale(0.985);
+            transition: opacity 0.28s ease, transform 0.28s ease;
         }
 
-        .ios-grid-item:active img {
+        .ios-grid-item img.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .ios-grid-item:active img.loaded {
             transform: scale(0.95);
         }
 
@@ -561,12 +568,19 @@
             height: 100%;
         }
 
+        .fullscreen-swiper .swiper-wrapper {
+            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translate3d(0, 0, 0);
+        }
+
         .fullscreen-swiper .swiper-slide {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100vw;
             padding: 54px 0 16px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         .fullscreen-swiper img {
@@ -575,6 +589,9 @@
             max-height: 86dvh;
             object-fit: contain;
             display: block;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translate3d(0, 0, 0);
         }
     </style>
 </head>
@@ -699,7 +716,8 @@
             .filter((name) => !EXCLUDED_PHOTOS.has(name));
 
         let gridRendered = false;
-        let sequentialPreloadStarted = false;
+        let sequentialRevealStarted = false;
+        const gridImageElements = [];
 
         const mainWrapper = document.getElementById("main-swiper-wrapper");
         const fsWrapper = document.getElementById("fs-swiper-wrapper");
@@ -721,7 +739,7 @@
                 const fsSlide = document.createElement("div");
                 fsSlide.className = "swiper-slide";
                 fsSlide.innerHTML = `
-                    <img src="${src}" alt="Foto ${index + 1}" loading="lazy" decoding="async">
+                    <img src="${src}" alt="Foto ${index + 1}" loading="eager" decoding="async">
                 `;
                 fsWrapper.appendChild(fsSlide);
             });
@@ -765,7 +783,10 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
-            speed: 450,
+            speed: 420,
+            watchSlidesProgress: true,
+            resistanceRatio: 0.72,
+            touchReleaseOnEdges: true,
             observer: true,
             observeParents: true,
             on: {
@@ -789,30 +810,52 @@
             }
         }
 
-        // Precarica le anteprime in ordine rigorosamente sequenziale
-        function startSequentialPreload() {
-            if (sequentialPreloadStarted) return;
-            sequentialPreloadStarted = true;
+        // Carica e rivela le anteprime una dopo l'altra in ordine rigorosamente sequenziale
+        function startSequentialGridReveal() {
+            if (sequentialRevealStarted) return;
+            sequentialRevealStarted = true;
 
             let current = 0;
-            function loadNextInSequence() {
-                if (current >= photos.length) return;
-                const img = new Image();
-                img.decoding = "async";
-                img.onload = () => {
+
+            function revealNext() {
+                if (current >= gridImageElements.length) return;
+                const imgEl = gridImageElements[current];
+                const targetSrc = photos[current];
+
+                const finishStep = () => {
+                    requestAnimationFrame(() => {
+                        imgEl.classList.add("loaded");
+                    });
                     current++;
-                    loadNextInSequence();
+                    setTimeout(revealNext, 45);
                 };
-                img.onerror = () => {
-                    current++;
-                    loadNextInSequence();
-                };
-                img.src = photos[current];
+
+                if (imgEl.complete && imgEl.naturalWidth > 0) {
+                    finishStep();
+                } else {
+                    const onLoad = () => {
+                        imgEl.removeEventListener("load", onLoad);
+                        imgEl.removeEventListener("error", onError);
+                        finishStep();
+                    };
+                    const onError = () => {
+                        imgEl.removeEventListener("load", onLoad);
+                        imgEl.removeEventListener("error", onError);
+                        current++;
+                        revealNext();
+                    };
+                    imgEl.addEventListener("load", onLoad);
+                    imgEl.addEventListener("error", onError);
+                    if (!imgEl.src || !imgEl.src.endsWith(targetSrc)) {
+                        imgEl.src = targetSrc;
+                    }
+                }
             }
-            loadNextInSequence();
+
+            revealNext();
         }
 
-        // Monta tutte le foto in ordine sequenziale così compaiono tutte insieme nella griglia
+        // Crea tutti gli slot della griglia in ordine sequenziale
         function renderAllGridPhotosSequentially() {
             if (gridRendered) return;
             gridRendered = true;
@@ -822,12 +865,18 @@
                 const item = document.createElement("div");
                 item.className = "ios-grid-item";
                 item.onclick = () => selectFromGrid(i);
-                item.innerHTML = `<img src="${photos[i]}" alt="Foto ${i + 1}" loading="eager" decoding="async">`;
+
+                const img = document.createElement("img");
+                img.alt = `Foto ${i + 1}`;
+                img.decoding = "async";
+                gridImageElements.push(img);
+
+                item.appendChild(img);
                 fragment.appendChild(item);
             }
 
             iosGrid.appendChild(fragment);
-            startSequentialPreload();
+            startSequentialGridReveal();
         }
 
         function openGridView() {
