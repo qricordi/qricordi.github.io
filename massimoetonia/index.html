@@ -575,8 +575,6 @@
             align-items: center;
             width: 100vw;
             padding: 54px 0 16px;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
         }
 
         .fullscreen-swiper img {
@@ -585,9 +583,6 @@
             max-height: 86dvh;
             object-fit: contain;
             display: block;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            transform: translate3d(0, 0, 0);
         }
     </style>
 </head>
@@ -798,7 +793,9 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
-            speed: 350,
+            speed: 300,
+            threshold: 5,
+            followFinger: true,
             resistanceRatio: 0.85,
             touchReleaseOnEdges: true,
             preloadImages: false,
