@@ -147,10 +147,16 @@
             position: relative;
         }
 
+        .mySwiper .swiper-wrapper {
+            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
         .swiper-slide {
             display: flex;
             justify-content: center;
             align-items: center;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         /* Cornice bianca uniforme su tutti e 4 i lati */
@@ -166,10 +172,10 @@
             max-height: 100%;
             margin: auto;
             cursor: zoom-in;
-            transition: transform 0.2s ease;
-            opacity: 0;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             transform: translate3d(0, 10px, 0) scale(0.988);
-            will-change: opacity, transform;
+            opacity: 0;
             animation: photoFluidIn 2.6s cubic-bezier(0.22, 1, 0.36, 1) calc(7.95s + var(--anim-offset)) forwards;
         }
 
@@ -185,6 +191,8 @@
             object-fit: contain;
             border-radius: 4px;
             display: block;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         @keyframes photoFluidIn {
@@ -628,7 +636,7 @@
                 </svg>
             </button>
             <div class="fullscreen-top-right">
-                <span class="fullscreen-counter" id="fs-counter">1 / 56</span>
+                <span class="fullscreen-counter" id="fs-counter">1 / 55</span>
                 <button class="share-btn" onclick="shareCurrentPhoto()" aria-label="Condividi foto">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
@@ -684,9 +692,11 @@
             ensureVideoPlays();
         }
 
-        // 56 foto nel nuovo repository: da "foto1.jpg" a "foto56.jpg"
+        // Foto da 1 a 56 escludendo "foto32.jpg"
         const TOTAL_PHOTOS = 56;
-        const photos = Array.from({ length: TOTAL_PHOTOS }, (_, i) => `foto${i + 1}.jpg`);
+        const EXCLUDED_PHOTOS = new Set(["foto32.jpg"]);
+        const photos = Array.from({ length: TOTAL_PHOTOS }, (_, i) => `foto${i + 1}.jpg`)
+            .filter((name) => !EXCLUDED_PHOTOS.has(name));
 
         let gridRendered = false;
         let sequentialPreloadStarted = false;
@@ -724,11 +734,27 @@
             spaceBetween: 30,
             centeredSlides: true,
             grabCursor: true,
+            speed: 650,
+            watchSlidesProgress: true,
+            resistanceRatio: 0.72,
             navigation: {
                 nextEl: ".mySwiper .swiper-button-next",
                 prevEl: ".mySwiper .swiper-button-prev",
             },
             on: {
+                setProgress: function (swiperInstance) {
+                    const introDone = performance.now() > 10600;
+                    for (let i = 0; i < swiperInstance.slides.length; i++) {
+                        const slide = swiperInstance.slides[i];
+                        const card = slide.querySelector(".photo-card");
+                        if (!card || !introDone) continue;
+                        const progress = Math.min(Math.abs(slide.progress || 0), 1);
+                        const scale = 1 - progress * 0.035;
+                        const opacity = 1 - progress * 0.28;
+                        card.style.transform = `translate3d(0, 0, 0) scale(${scale.toFixed(4)})`;
+                        card.style.opacity = opacity.toFixed(3);
+                    }
+                },
                 slideChange: function () {
                     preloadPhoto(this.activeIndex + 1);
                 }
@@ -739,6 +765,7 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
+            speed: 450,
             observer: true,
             observeParents: true,
             on: {
@@ -762,7 +789,7 @@
             }
         }
 
-        // Precarica le anteprime in ordine rigorosamente sequenziale (1 -> 56)
+        // Precarica le anteprime in ordine rigorosamente sequenziale
         function startSequentialPreload() {
             if (sequentialPreloadStarted) return;
             sequentialPreloadStarted = true;
@@ -785,7 +812,7 @@
             loadNextInSequence();
         }
 
-        // Monta tutte le 56 foto in ordine sequenziale così compaiono tutte insieme nella griglia
+        // Monta tutte le foto in ordine sequenziale così compaiono tutte insieme nella griglia
         function renderAllGridPhotosSequentially() {
             if (gridRendered) return;
             gridRendered = true;
