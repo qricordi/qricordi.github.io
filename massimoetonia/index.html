@@ -448,7 +448,7 @@
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s;
+            transition: opacity 0.25s ease, visibility 0.25s;
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
         }
@@ -566,11 +566,7 @@
         .fullscreen-swiper {
             width: 100vw;
             height: 100%;
-        }
-
-        .fullscreen-swiper .swiper-wrapper {
-            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-            transform: translate3d(0, 0, 0);
+            touch-action: pan-y;
         }
 
         .fullscreen-swiper .swiper-slide {
@@ -718,10 +714,26 @@
         let gridRendered = false;
         let sequentialRevealStarted = false;
         const gridImageElements = [];
+        const fsImageElements = [];
 
         const mainWrapper = document.getElementById("main-swiper-wrapper");
         const fsWrapper = document.getElementById("fs-swiper-wrapper");
         const iosGrid = document.getElementById("ios-grid");
+
+        function ensureFullscreenPhoto(index) {
+            if (index < 0 || index >= fsImageElements.length) return;
+            const img = fsImageElements[index];
+            if (!img.getAttribute("src")) {
+                img.decoding = "async";
+                img.src = photos[index];
+            }
+        }
+
+        function preloadNeighborsFullscreen(index) {
+            ensureFullscreenPhoto(index);
+            ensureFullscreenPhoto(index + 1);
+            ensureFullscreenPhoto(index - 1);
+        }
 
         function buildSwipers() {
             photos.forEach((src, index) => {
@@ -738,9 +750,12 @@
 
                 const fsSlide = document.createElement("div");
                 fsSlide.className = "swiper-slide";
-                fsSlide.innerHTML = `
-                    <img src="${src}" alt="Foto ${index + 1}" loading="eager" decoding="async">
-                `;
+                const fsImg = document.createElement("img");
+                fsImg.alt = `Foto ${index + 1}`;
+                fsImg.loading = "lazy";
+                fsImg.decoding = "async";
+                fsImageElements.push(fsImg);
+                fsSlide.appendChild(fsImg);
                 fsWrapper.appendChild(fsSlide);
             });
         }
@@ -783,17 +798,14 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
-            speed: 420,
-            watchSlidesProgress: true,
-            resistanceRatio: 0.72,
+            speed: 350,
+            resistanceRatio: 0.85,
             touchReleaseOnEdges: true,
-            observer: true,
-            observeParents: true,
+            preloadImages: false,
             on: {
                 slideChange: function () {
                     updateCounter(this.activeIndex);
-                    swiper.slideTo(this.activeIndex, 0);
-                    preloadPhoto(this.activeIndex + 1);
+                    preloadNeighborsFullscreen(this.activeIndex);
                 }
             }
         });
@@ -895,8 +907,7 @@
         }
 
         function openFullscreen(index) {
-            preloadPhoto(index);
-            preloadPhoto(index + 1);
+            preloadNeighborsFullscreen(index);
             const overlay = document.getElementById('fullscreen-overlay');
             overlay.classList.add('active');
             fsSwiper.update();
@@ -905,7 +916,9 @@
         }
 
         function closeFullscreen() {
+            const currentIdx = fsSwiper.activeIndex || 0;
             document.getElementById('fullscreen-overlay').classList.remove('active');
+            swiper.slideTo(currentIdx, 0);
         }
 
         function showToast(message) {
