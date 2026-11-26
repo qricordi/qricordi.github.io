@@ -712,8 +712,10 @@
         // Durata di riferimento del precedente logo: 6.2s (fade-out splash da 5.2s a 7.0s)
         const PREVIOUS_LOGO_DURATION = 6.2;
         const logoVideo = document.getElementById("logo-video");
+        const splashScreen = document.getElementById("splash-screen");
         let timingApplied = false;
         let splashPreloadStarted = false;
+        let backgroundPreloadStarted = false;
 
         function syncTimingsWithVideo() {
             if (timingApplied) return;
@@ -740,6 +742,7 @@
         const photos = Array.from({ length: TOTAL_PHOTOS }, (_, i) => `foto${i + 1}.jpg`)
             .filter((name) => !EXCLUDED_PHOTOS.has(name));
 
+        const preloadedSet = new Set();
         let gridRendered = false;
         let sequentialRevealStarted = false;
         const gridImageElements = [];
@@ -775,16 +778,61 @@
             ensureFullscreenPhoto(index - 1);
         }
 
+        function preloadPhoto(index) {
+            if (index < 0 || index >= photos.length) return;
+            const src = photos[index];
+            if (preloadedSet.has(src)) return;
+            preloadedSet.add(src);
+
+            const img = new Image();
+            img.decoding = "async";
+            img.onload = () => decodeImageSafely(img);
+            img.src = src;
+        }
+
+        // Precaricamento continuo in background per le foto rimanenti
+        function startBackgroundPreload(startIndex) {
+            if (backgroundPreloadStarted) return;
+            backgroundPreloadStarted = true;
+
+            let bgIndex = Math.max(0, startIndex);
+
+            function stepBackground() {
+                if (bgIndex >= photos.length) return;
+
+                if (document.hidden) {
+                    setTimeout(stepBackground, 1200);
+                    return;
+                }
+
+                const currentIdx = bgIndex++;
+                preloadPhoto(currentIdx);
+
+                // Prepara anche le prime immagini dello schermo intero in modo scaglionato
+                if (currentIdx < 16) {
+                    ensureFullscreenPhoto(currentIdx);
+                }
+
+                setTimeout(stepBackground, 450);
+            }
+
+            setTimeout(stepBackground, 500);
+        }
+
+        const INITIAL_BATCH = Math.min(8, photos.length);
+
         // Precaricamento scaglionato durante il video iniziale per non disturbare la riproduzione
         function startSplashStaggeredPreload() {
             if (splashPreloadStarted) return;
             splashPreloadStarted = true;
 
-            const INITIAL_BATCH = Math.min(8, photos.length);
             let idx = 0;
 
             function loadNextSplashPhoto() {
-                if (idx >= INITIAL_BATCH) return;
+                if (idx >= INITIAL_BATCH) {
+                    startBackgroundPreload(INITIAL_BATCH);
+                    return;
+                }
                 const currentIndex = idx++;
                 preloadPhoto(currentIndex);
                 if (currentIndex <= 2) {
@@ -796,6 +844,10 @@
             setTimeout(loadNextSplashPhoto, 900);
         }
 
+        splashScreen.addEventListener("animationend", () => {
+            startBackgroundPreload(INITIAL_BATCH);
+        }, { once: true });
+
         logoVideo.addEventListener("loadedmetadata", () => {
             syncTimingsWithVideo();
             ensureVideoPlays();
@@ -806,6 +858,7 @@
         logoVideo.addEventListener("ended", () => {
             syncTimingsWithVideo();
             startSplashStaggeredPreload();
+            startBackgroundPreload(INITIAL_BATCH);
         });
 
         if (logoVideo.readyState >= 1) {
@@ -901,15 +954,6 @@
 
         function updateCounter(index) {
             document.getElementById('fs-counter').textContent = (index + 1) + ' / ' + photos.length;
-        }
-
-        function preloadPhoto(index) {
-            if (index >= 0 && index < photos.length) {
-                const img = new Image();
-                img.decoding = "async";
-                img.onload = () => decodeImageSafely(img);
-                img.src = photos[index];
-            }
         }
 
         // Carica e rivela le anteprime una dopo l'altra in ordine rigorosamente sequenziale
