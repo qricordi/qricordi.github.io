@@ -149,12 +149,14 @@
 
         .mySwiper .swiper-wrapper {
             transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
         }
 
         .swiper-slide {
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
         }
@@ -180,7 +182,7 @@
         }
 
         .photo-card:active {
-            transform: scale(0.985);
+            transform: translate3d(0, 0, 0) scale(0.985);
         }
 
         .photo-card img {
@@ -569,12 +571,19 @@
             touch-action: pan-y;
         }
 
+        .fullscreen-swiper .swiper-wrapper {
+            will-change: transform;
+        }
+
         .fullscreen-swiper .swiper-slide {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100vw;
             padding: 54px 0 16px;
+            overflow: hidden;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         .fullscreen-swiper img {
@@ -583,6 +592,8 @@
             max-height: 86dvh;
             object-fit: contain;
             display: block;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
     </style>
 </head>
@@ -715,12 +726,21 @@
         const fsWrapper = document.getElementById("fs-swiper-wrapper");
         const iosGrid = document.getElementById("ios-grid");
 
+        function decodeImageSafely(img) {
+            if (typeof img.decode === "function") {
+                img.decode().catch(() => {});
+            }
+        }
+
         function ensureFullscreenPhoto(index) {
             if (index < 0 || index >= fsImageElements.length) return;
             const img = fsImageElements[index];
             if (!img.getAttribute("src")) {
                 img.decoding = "async";
+                img.addEventListener("load", () => decodeImageSafely(img), { once: true });
                 img.src = photos[index];
+            } else if (img.complete && img.naturalWidth > 0) {
+                decodeImageSafely(img);
             }
         }
 
@@ -732,7 +752,7 @@
 
         function buildSwipers() {
             photos.forEach((src, index) => {
-                const loadMode = index === 0 ? "eager" : "lazy";
+                const loadMode = index <= 1 ? "eager" : "lazy";
 
                 const mainSlide = document.createElement("div");
                 mainSlide.className = "swiper-slide";
@@ -747,7 +767,7 @@
                 fsSlide.className = "swiper-slide";
                 const fsImg = document.createElement("img");
                 fsImg.alt = `Foto ${index + 1}`;
-                fsImg.loading = "lazy";
+                fsImg.loading = "eager";
                 fsImg.decoding = "async";
                 fsImageElements.push(fsImg);
                 fsSlide.appendChild(fsImg);
@@ -762,29 +782,16 @@
             spaceBetween: 30,
             centeredSlides: true,
             grabCursor: true,
-            speed: 650,
-            watchSlidesProgress: true,
+            speed: 550,
             resistanceRatio: 0.72,
             navigation: {
                 nextEl: ".mySwiper .swiper-button-next",
                 prevEl: ".mySwiper .swiper-button-prev",
             },
             on: {
-                setProgress: function (swiperInstance) {
-                    const introDone = performance.now() > 10600;
-                    for (let i = 0; i < swiperInstance.slides.length; i++) {
-                        const slide = swiperInstance.slides[i];
-                        const card = slide.querySelector(".photo-card");
-                        if (!card || !introDone) continue;
-                        const progress = Math.min(Math.abs(slide.progress || 0), 1);
-                        const scale = 1 - progress * 0.035;
-                        const opacity = 1 - progress * 0.28;
-                        card.style.transform = `translate3d(0, 0, 0) scale(${scale.toFixed(4)})`;
-                        card.style.opacity = opacity.toFixed(3);
-                    }
-                },
                 slideChange: function () {
                     preloadPhoto(this.activeIndex + 1);
+                    preloadPhoto(this.activeIndex - 1);
                 }
             }
         });
@@ -793,7 +800,7 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
-            speed: 300,
+            speed: 320,
             threshold: 5,
             followFinger: true,
             resistanceRatio: 0.85,
@@ -815,6 +822,7 @@
             if (index >= 0 && index < photos.length) {
                 const img = new Image();
                 img.decoding = "async";
+                img.onload = () => decodeImageSafely(img);
                 img.src = photos[index];
             }
         }
