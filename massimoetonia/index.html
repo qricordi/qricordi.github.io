@@ -13,6 +13,7 @@
     <style>
         :root {
             --anim-offset: 0s;
+            --kinetic-ease: cubic-bezier(0.42, 0.02, 0.14, 1);
         }
 
         * {
@@ -147,8 +148,9 @@
             position: relative;
         }
 
+        /* Curva cinetica: partenza graduale, accelerazione centrale, decelerazione morbida */
         .mySwiper .swiper-wrapper {
-            transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+            transition-timing-function: var(--kinetic-ease) !important;
             will-change: transform;
         }
 
@@ -174,11 +176,30 @@
             max-height: 100%;
             margin: auto;
             cursor: zoom-in;
+            will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
             transform: translate3d(0, 10px, 0) scale(0.988);
             opacity: 0;
             animation: photoFluidIn 2.6s cubic-bezier(0.22, 1, 0.36, 1) calc(7.95s + var(--anim-offset)) forwards;
+        }
+
+        /* Spinta inerziale durante il movimento del carosello */
+        .mySwiper.is-kinetic-moving .photo-card {
+            transition: transform 0.48s var(--kinetic-ease);
+        }
+
+        .mySwiper.is-kinetic-moving.kinetic-dir-next .photo-card {
+            transform: translate3d(14px, 0, 0) scale(0.968);
+        }
+
+        .mySwiper.is-kinetic-moving.kinetic-dir-prev .photo-card {
+            transform: translate3d(-14px, 0, 0) scale(0.968);
+        }
+
+        .mySwiper:not(.is-kinetic-moving) .photo-card {
+            transition: transform 0.55s var(--kinetic-ease);
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
         .photo-card:active {
@@ -722,6 +743,7 @@
         const gridImageElements = [];
         const fsImageElements = [];
 
+        const mainSwiperEl = document.querySelector(".mySwiper");
         const mainWrapper = document.getElementById("main-swiper-wrapper");
         const fsWrapper = document.getElementById("fs-swiper-wrapper");
         const iosGrid = document.getElementById("ios-grid");
@@ -777,21 +799,33 @@
 
         buildSwipers();
 
+        let lastSlideIndex = 0;
+
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
             spaceBetween: 30,
             centeredSlides: true,
             grabCursor: true,
-            speed: 550,
+            speed: 950,
             resistanceRatio: 0.72,
             navigation: {
                 nextEl: ".mySwiper .swiper-button-next",
                 prevEl: ".mySwiper .swiper-button-prev",
             },
             on: {
-                slideChange: function () {
+                slideChangeTransitionStart: function () {
+                    const isNext = this.activeIndex >= lastSlideIndex;
+                    mainSwiperEl.classList.remove("kinetic-dir-next", "kinetic-dir-prev");
+                    mainSwiperEl.classList.add(
+                        "is-kinetic-moving",
+                        isNext ? "kinetic-dir-next" : "kinetic-dir-prev"
+                    );
+                    lastSlideIndex = this.activeIndex;
                     preloadPhoto(this.activeIndex + 1);
                     preloadPhoto(this.activeIndex - 1);
+                },
+                slideChangeTransitionEnd: function () {
+                    mainSwiperEl.classList.remove("is-kinetic-moving", "kinetic-dir-next", "kinetic-dir-prev");
                 }
             }
         });
@@ -800,7 +834,7 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
-            speed: 320,
+            speed: 360,
             threshold: 5,
             followFinger: true,
             resistanceRatio: 0.85,
@@ -907,6 +941,7 @@
 
         function selectFromGrid(index) {
             closeGridView();
+            lastSlideIndex = index;
             swiper.slideTo(index, 0);
             openFullscreen(index);
         }
@@ -923,6 +958,7 @@
         function closeFullscreen() {
             const currentIdx = fsSwiper.activeIndex || 0;
             document.getElementById('fullscreen-overlay').classList.remove('active');
+            lastSlideIndex = currentIdx;
             swiper.slideTo(currentIdx, 0);
         }
 
