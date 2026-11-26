@@ -66,6 +66,7 @@
             object-fit: cover;
             filter: invert(1);
             display: block;
+            transform: translateZ(0);
         }
 
         @keyframes splashFadeOut {
@@ -712,6 +713,7 @@
         const PREVIOUS_LOGO_DURATION = 6.2;
         const logoVideo = document.getElementById("logo-video");
         let timingApplied = false;
+        let splashPreloadStarted = false;
 
         function syncTimingsWithVideo() {
             if (timingApplied) return;
@@ -730,18 +732,6 @@
                     // Fallback per browser che bloccano l'autoplay finché non c'è un'interazione
                 });
             }
-        }
-
-        logoVideo.addEventListener("loadedmetadata", () => {
-            syncTimingsWithVideo();
-            ensureVideoPlays();
-        });
-        logoVideo.addEventListener("durationchange", syncTimingsWithVideo);
-        logoVideo.addEventListener("ended", syncTimingsWithVideo);
-
-        if (logoVideo.readyState >= 1) {
-            syncTimingsWithVideo();
-            ensureVideoPlays();
         }
 
         // Foto da 1 a 56 escludendo "foto32.jpg"
@@ -783,6 +773,48 @@
             ensureFullscreenPhoto(index);
             ensureFullscreenPhoto(index + 1);
             ensureFullscreenPhoto(index - 1);
+        }
+
+        // Precaricamento scaglionato durante il video iniziale per non disturbare la riproduzione
+        function startSplashStaggeredPreload() {
+            if (splashPreloadStarted) return;
+            splashPreloadStarted = true;
+
+            const INITIAL_BATCH = Math.min(8, photos.length);
+            let idx = 0;
+
+            function loadNextSplashPhoto() {
+                if (idx >= INITIAL_BATCH) return;
+                const currentIndex = idx++;
+                preloadPhoto(currentIndex);
+                if (currentIndex <= 2) {
+                    ensureFullscreenPhoto(currentIndex);
+                }
+                setTimeout(loadNextSplashPhoto, 260);
+            }
+
+            setTimeout(loadNextSplashPhoto, 900);
+        }
+
+        logoVideo.addEventListener("loadedmetadata", () => {
+            syncTimingsWithVideo();
+            ensureVideoPlays();
+            startSplashStaggeredPreload();
+        });
+        logoVideo.addEventListener("playing", startSplashStaggeredPreload, { once: true });
+        logoVideo.addEventListener("durationchange", syncTimingsWithVideo);
+        logoVideo.addEventListener("ended", () => {
+            syncTimingsWithVideo();
+            startSplashStaggeredPreload();
+        });
+
+        if (logoVideo.readyState >= 1) {
+            syncTimingsWithVideo();
+            ensureVideoPlays();
+            startSplashStaggeredPreload();
+        } else {
+            // Sicurezza se l'evento del video tarda
+            setTimeout(startSplashStaggeredPreload, 1500);
         }
 
         function buildSwipers() {
