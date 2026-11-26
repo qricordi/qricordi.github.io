@@ -603,38 +603,30 @@
             justify-content: center;
             align-items: center;
             width: 100vw;
-            padding: 54px 0 16px;
+            padding: 54px 12px 16px;
             overflow: hidden;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
         }
 
         .fullscreen-swiper img {
-            width: 100vw;
+            width: auto;
             height: auto;
-            max-height: 86dvh;
+            max-width: 100%;
+            max-height: 84dvh;
             object-fit: contain;
             display: block;
+            transform-origin: center center;
             will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+            transition: transform 0.45s var(--kinetic-ease);
+            transform: translate3d(0, 0, 0) scale(1);
         }
 
         .fullscreen-swiper.is-kinetic-moving img {
-            transition: transform 0.36s var(--kinetic-ease);
-        }
-
-        .fullscreen-swiper.is-kinetic-moving.kinetic-dir-next img {
-            transform: translate3d(12px, 0, 0) scale(0.975);
-        }
-
-        .fullscreen-swiper.is-kinetic-moving.kinetic-dir-prev img {
-            transform: translate3d(-12px, 0, 0) scale(0.975);
-        }
-
-        .fullscreen-swiper:not(.is-kinetic-moving) img {
-            transition: transform 0.42s var(--kinetic-ease);
-            transform: translate3d(0, 0, 0) scale(1);
+            transition: transform 0.35s var(--kinetic-ease);
+            transform: translate3d(0, 0, 0) scale(0.974);
         }
     </style>
 </head>
@@ -821,7 +813,6 @@
         buildSwipers();
 
         let lastSlideIndex = 0;
-        let lastFsSlideIndex = 0;
 
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
@@ -868,16 +859,10 @@
                     preloadNeighborsFullscreen(this.activeIndex);
                 },
                 slideChangeTransitionStart: function () {
-                    const isNext = this.activeIndex >= lastFsSlideIndex;
-                    fsSwiperEl.classList.remove("kinetic-dir-next", "kinetic-dir-prev");
-                    fsSwiperEl.classList.add(
-                        "is-kinetic-moving",
-                        isNext ? "kinetic-dir-next" : "kinetic-dir-prev"
-                    );
-                    lastFsSlideIndex = this.activeIndex;
+                    fsSwiperEl.classList.add("is-kinetic-moving");
                 },
                 slideChangeTransitionEnd: function () {
-                    fsSwiperEl.classList.remove("is-kinetic-moving", "kinetic-dir-next", "kinetic-dir-prev");
+                    fsSwiperEl.classList.remove("is-kinetic-moving");
                 }
             }
         });
@@ -985,7 +970,6 @@
             const overlay = document.getElementById('fullscreen-overlay');
             overlay.classList.add('active');
             fsSwiper.update();
-            lastFsSlideIndex = index;
             fsSwiper.slideTo(index, 0);
             updateCounter(index);
         }
