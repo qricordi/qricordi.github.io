@@ -592,7 +592,9 @@
             touch-action: pan-y;
         }
 
+        /* Curva cinetica anche per lo scorrimento a schermo intero */
         .fullscreen-swiper .swiper-wrapper {
+            transition-timing-function: var(--kinetic-ease) !important;
             will-change: transform;
         }
 
@@ -613,8 +615,26 @@
             max-height: 86dvh;
             object-fit: contain;
             display: block;
+            will-change: transform;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+        }
+
+        .fullscreen-swiper.is-kinetic-moving img {
+            transition: transform 0.36s var(--kinetic-ease);
+        }
+
+        .fullscreen-swiper.is-kinetic-moving.kinetic-dir-next img {
+            transform: translate3d(12px, 0, 0) scale(0.975);
+        }
+
+        .fullscreen-swiper.is-kinetic-moving.kinetic-dir-prev img {
+            transform: translate3d(-12px, 0, 0) scale(0.975);
+        }
+
+        .fullscreen-swiper:not(.is-kinetic-moving) img {
+            transition: transform 0.42s var(--kinetic-ease);
+            transform: translate3d(0, 0, 0) scale(1);
         }
     </style>
 </head>
@@ -744,6 +764,7 @@
         const fsImageElements = [];
 
         const mainSwiperEl = document.querySelector(".mySwiper");
+        const fsSwiperEl = document.getElementById("fsSwiper");
         const mainWrapper = document.getElementById("main-swiper-wrapper");
         const fsWrapper = document.getElementById("fs-swiper-wrapper");
         const iosGrid = document.getElementById("ios-grid");
@@ -800,6 +821,7 @@
         buildSwipers();
 
         let lastSlideIndex = 0;
+        let lastFsSlideIndex = 0;
 
         const swiper = new Swiper(".mySwiper", {
             slidesPerView: 1,
@@ -834,7 +856,7 @@
             slidesPerView: 1,
             spaceBetween: 0,
             centeredSlides: true,
-            speed: 360,
+            speed: 620,
             threshold: 5,
             followFinger: true,
             resistanceRatio: 0.85,
@@ -844,6 +866,18 @@
                 slideChange: function () {
                     updateCounter(this.activeIndex);
                     preloadNeighborsFullscreen(this.activeIndex);
+                },
+                slideChangeTransitionStart: function () {
+                    const isNext = this.activeIndex >= lastFsSlideIndex;
+                    fsSwiperEl.classList.remove("kinetic-dir-next", "kinetic-dir-prev");
+                    fsSwiperEl.classList.add(
+                        "is-kinetic-moving",
+                        isNext ? "kinetic-dir-next" : "kinetic-dir-prev"
+                    );
+                    lastFsSlideIndex = this.activeIndex;
+                },
+                slideChangeTransitionEnd: function () {
+                    fsSwiperEl.classList.remove("is-kinetic-moving", "kinetic-dir-next", "kinetic-dir-prev");
                 }
             }
         });
@@ -951,6 +985,7 @@
             const overlay = document.getElementById('fullscreen-overlay');
             overlay.classList.add('active');
             fsSwiper.update();
+            lastFsSlideIndex = index;
             fsSwiper.slideTo(index, 0);
             updateCounter(index);
         }
